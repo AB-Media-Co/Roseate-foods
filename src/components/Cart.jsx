@@ -16,6 +16,7 @@ export default function Cart() {
     isLoading,
     error,
   } = useCart();
+  console.log(cart);
 
   if (error) return <p className="text-red-600">{error.message}</p>;
   if (!cart) return <p className="text-body">Cart is empty</p>;
