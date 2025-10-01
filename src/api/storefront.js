@@ -6,9 +6,11 @@ import {
   REMOVE_FROM_CART,
   UPDATE_CART_LINES,
   GET_CART_BY_ID,
+  GET_COLLECTION_BY_HANDLE,
+  GET_COLLECTIONS,
 } from "../graphql/queries";
 
-export async function apiGetProducts(first = 12) {
+export async function apiGetProducts(first) {
   const data = await shopify.request(GET_PRODUCTS, { first });
   return data.products?.edges?.map((e) => e.node) ?? [];
 }
@@ -52,4 +54,15 @@ export async function apiCartLinesUpdate(cartId, lines) {
 export async function apiGetCartById(id) {
   const data = await shopify.request(GET_CART_BY_ID, { id });
   return data.cart;
+}
+
+
+export async function apiGetCollections(first = 20, after = null) {
+  const data = await shopify.request(GET_COLLECTIONS, { first, after });
+  return data.collections?.edges?.map(e => e.node) ?? [];
+}
+
+export async function apiGetCollectionByHandle(handle, first = 20, after = null) {
+  const data = await shopify.request(GET_COLLECTION_BY_HANDLE, { handle, first, after });
+  return data.collection; // includes products connection
 }

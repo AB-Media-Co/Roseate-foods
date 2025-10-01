@@ -257,3 +257,50 @@ export const GET_CART_BY_ID = `
     }
   }
 `;
+
+
+// add these next to your existing exports
+
+export const GET_COLLECTIONS = `
+  query GetCollections($first: Int!, $after: String) {
+    collections(first: $first, after: $after) {
+      edges {
+        cursor
+        node {
+          id
+          handle
+          title
+          description
+          image { url altText }
+          updatedAt
+        }
+      }
+      pageInfo { hasNextPage }
+    }
+  }
+`;
+
+export const GET_COLLECTION_BY_HANDLE = `
+  query GetCollectionByHandle($handle: String!, $first: Int = 20, $after: String) {
+    collection(handle: $handle) {
+      id
+      handle
+      title
+      description
+      image { url altText }
+      products(first: $first, after: $after) {
+        edges {
+          cursor
+          node {
+            id
+            title
+            featuredImage { url altText }
+            priceRange { minVariantPrice { amount currencyCode } }
+          }
+        }
+        pageInfo { hasNextPage }
+      }
+    }
+  }
+`;
+
