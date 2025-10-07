@@ -1,18 +1,20 @@
 import React from 'react'
-import HomeNav from './Components/HomeNav'
-import { useProducts } from '../../hooks/useProducts';
-import { useCollectionByHandle } from '../../hooks/useCollections';
+import WhyRoseateFarms from './Components/WhyRoseateFarms';
+import HeroSection from './Components/HeroSection';
+import SaleCountdownBanner from './Components/SaleCountdownBanner';
+import ProductSection from './Components/ProductSection';
+import ShopByCategories from './Components/ShopByCategories';
 
 const Home = () => {
-  const { data: products, status, error } = useProducts(50);
-  console.log(products);
-  const { data: collections } = useCollectionByHandle(20);
-  console.log(collections);
-
 
   return (
-    <div>
-      <HomeNav />
+    <div className='py-10 content'>
+      <HeroSection/>
+      <WhyRoseateFarms/>
+      <ProductSection/>
+      <SaleCountdownBanner/>
+      <ShopByCategories/>
+
     </div>
   )
 }

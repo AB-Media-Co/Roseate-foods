@@ -57,12 +57,33 @@ export async function apiGetCartById(id) {
 }
 
 
-export async function apiGetCollections(first = 20, after = null) {
+
+export async function apiGetCollections(first = 20, after) {
   const data = await shopify.request(GET_COLLECTIONS, { first, after });
-  return data.collections?.edges?.map(e => e.node) ?? [];
+  const conn = data.collections ?? { edges: [], pageInfo: {} };
+  return {
+    items: conn.edges.map(e => e.node),   // no productsCount here
+    pageInfo: conn.pageInfo,
+  };
 }
 
-export async function apiGetCollectionByHandle(handle, first = 20, after = null) {
-  const data = await shopify.request(GET_COLLECTION_BY_HANDLE, { handle, first, after });
-  return data.collection; // includes products connection
+export async function apiGetCollectionByHandle(handle, productsFirst = 24, productsAfter) {
+  const data = await shopify.request(GET_COLLECTION_BY_HANDLE, {
+    handle,
+    productsFirst,
+    productsAfter,
+  });
+
+  const c = data.collectionByHandle;
+  if (!c) return null;
+
+  return {
+    id: c.id,
+    handle: c.handle,
+    title: c.title,
+    description: c.description,
+    image: c.image,
+    products: c.products.edges.map(e => e.node),
+    productsPageInfo: c.products.pageInfo,
+  };
 }

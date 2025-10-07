@@ -1,25 +1,113 @@
 /* Tailwind entry and design tokens */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Knewave&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import "tailwindcss";
 
 @theme {
-    /* Brand colors */
-    --color-brand-500: #137D67;
-    --color-brand-600: color-mix(in oklab, var(--color-brand-500), black 12%);
-    --color-brand-400: color-mix(in oklab, var(--color-brand-500), white 12%);
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+  Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
+  "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
-    /* Typography (fluid) */
-    /* Responsive heading (32px → 70px) */
-    --text-heading: clamp(1.75rem, 5vw + 1rem, 4.375rem);
-    --text-heading--line-height: 1.1026;
-    /* 110.26% */
-    --text-heading--font-weight: 600;
-    /* semibold */
+  --color-brand-500: #137D67;
+  --color-brand-50: #137d6766;
+  --color-brand-600: color-mix(in oklab, var(--color-brand-500), black 12%);
+  --color-brand-400: color-mix(in oklab, var(--color-brand-500), white 12%);
 
-    --text-subheading: clamp(1.25rem, 1.2vw + 0.9rem, 1.5rem);
-    --text-body: clamp(0.95rem, 0.5vw + 0.8rem, 1rem);
-    --text-small: clamp(0.8rem, 0.3vw + 0.7rem, 0.875rem);
+  /* Fluid body + small */
+  --text-body: clamp(0.95rem, 0.5vw + 0.8rem, 1rem);
+  --text-small: clamp(0.8rem, 0.3vw + 0.7rem, 0.875rem);
+
+  /* Custom font */
+  --font-knewave: "Knewave", system-ui;
 }
 
+/* -------------------------------------- */
+/* Typography utilities                   */
+/* -------------------------------------- */
+@layer utilities {
+  /* ========== HEADING ========== */
+  .text-heading {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    line-height: 1.1;
+    font-size: 27px; /* Mobile default */
+  }
+  @media (min-width: 768px) { /* Tablet */
+    .text-heading {
+      font-size: 40px;
+    }
+  }
+  @media (min-width: 1024px) { /* Desktop */
+    .text-heading {
+      font-size: 60px;
+    }
+  }
+
+  /* ========== SUBHEADING ========== */
+  .text-subheading {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    line-height: 1.2;
+    font-size: 22px; /* Mobile */
+  }
+  @media (min-width: 768px) { /* Tablet + Desktop */
+    .text-subheading {
+      font-size: 40px;
+    }
+  }
+
+  /* ========== BODY ========== */
+  .text-body {
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.6;
+  }
+
+  /* ========== SMALL TEXT ========== */
+  .text-small {
+    font-family: var(--font-sans);
+    font-size: var(--text-small);
+    line-height: 1.5;
+  }
+
+  /* Optional Knewave variant */
+  .font-knewave {
+    font-family: var(--font-knewave);
+  }
+}
+
+
+
+
+@layer utilities {
+
+  /* Hide scrollbar for Chrome, Safari, and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge, and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+}
+
+
 .content {
-    @apply mx-auto max-w-[1808px] w-full md:w-11/12 px-4;
+  @apply mx-auto max-w-[1808px] w-full md:w-11/12 px-4;
+}
+
+
+/* Make Inter the default everywhere */
+html {
+  @apply font-sans antialiased;
+}
+
+/* (Optional) nicer rendering on macOS */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

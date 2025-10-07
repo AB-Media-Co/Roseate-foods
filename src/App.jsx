@@ -1,25 +1,30 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-// moved Tailwind and styles into index.css
-import Cart from './components/Cart';
-import ProductGrid from './components/ProductGrid';
+// src/App.jsx
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AnnouncementBanner from "./components/AnnouncementBanner";
 import Home from "./Pages/Home/Home";
+import Nav from "./components/Nav";
+import { StorefrontProvider } from "./context/StorefrontContext";
+import OurStory from "./Pages/OurStory/OurStory";
 
 function App() {
   return (
     <Router>
-      <AnnouncementBanner />
-      {/* <nav style={{ margin: "10px" }}>
-        <Link to="/" style={{ marginRight: "10px" }}>Products</Link>
-        <Link to="/cart">Cart</Link>
-      </nav> */}
-
-      <Routes>
-        <Route path="/" element={<Home />} />
-        {/* <Route path="/cart" element={<Cart />} /> */}
-      </Routes>
+      <StorefrontProvider
+        productsFirst={12}
+        collectionsFirst={20}
+        infiniteCollectionsPageSize={20}
+        selectedCollectionHandle={null} // or a handle like "new-arrivals"
+        collectionProductsFirst={24}
+      >
+        <AnnouncementBanner />
+        <Nav />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/our-story" element={<OurStory />} />
+          {/* add more routes here */}
+        </Routes>
+      </StorefrontProvider>
     </Router>
   );
 }
-
 export default App;

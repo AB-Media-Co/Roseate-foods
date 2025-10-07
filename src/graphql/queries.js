@@ -259,11 +259,12 @@ export const GET_CART_BY_ID = `
 `;
 
 
-// add these next to your existing exports
 
+
+// List collections (paged)
 export const GET_COLLECTIONS = `
   query GetCollections($first: Int!, $after: String) {
-    collections(first: $first, after: $after) {
+    collections(first: $first, after: $after, sortKey: TITLE) {
       edges {
         cursor
         node {
@@ -272,35 +273,40 @@ export const GET_COLLECTIONS = `
           title
           description
           image { url altText }
-          updatedAt
         }
       }
-      pageInfo { hasNextPage }
+      pageInfo { hasNextPage endCursor }
     }
   }
 `;
 
+// One collection by handle + its products (paged)
 export const GET_COLLECTION_BY_HANDLE = `
-  query GetCollectionByHandle($handle: String!, $first: Int = 20, $after: String) {
-    collection(handle: $handle) {
+  query GetCollectionByHandle(
+    $handle: String!
+    $productsFirst: Int!
+    $productsAfter: String
+  ) {
+    collectionByHandle(handle: $handle) {
       id
       handle
       title
       description
       image { url altText }
-      products(first: $first, after: $after) {
+      products(first: $productsFirst, after: $productsAfter) {
         edges {
           cursor
           node {
             id
+            handle
             title
             featuredImage { url altText }
             priceRange { minVariantPrice { amount currencyCode } }
+            variants(first: 1) { edges { node { id } } }
           }
         }
-        pageInfo { hasNextPage }
+        pageInfo { hasNextPage endCursor }
       }
     }
   }
 `;
-
