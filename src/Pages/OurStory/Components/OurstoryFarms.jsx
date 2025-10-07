@@ -21,7 +21,7 @@ const OurstoryFarms = () => {
             </div>
 
             {/* Grid of badges */}
-            <div className="flex items-center no-scrollbar justify-between gap-10 overflow-hidden overflow-x-auto">
+            <div className="flex items-center no-scrollbar justify-between gap-10 overflow-hidden overflow-x-auto content">
                 {FEATURES.map((feature) => (
                     <StarburstBadge
                         
