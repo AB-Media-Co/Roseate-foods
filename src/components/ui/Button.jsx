@@ -22,6 +22,7 @@ const Button = ({
     const sizes = {
         default: "px-4 py-2 text-sm rounded-md",
         sm: "px-3 py-1.5 text-xs rounded",
+        btn: "px-6 py-1.5 text-base rounded-full",
         lg: "px-6 py-3 text-base rounded-lg",
         icon: "p-1.5 rounded",
     };

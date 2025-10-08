@@ -55,31 +55,33 @@ export default function SaleCountdownBanner() {
     ];
 
     return (
+        <div className='content'>
 
-        <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-            <div
-                className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: "url('/Home/CountdownImg.png')" }}
-            />
-            <div
-                className="absolute inset-0"
-                style={{ backgroundColor: '#137D67A8' }}
-            />
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                <div
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{ backgroundImage: "url('/Home/CountdownImg.png')" }}
+                />
+                <div
+                    className="absolute inset-0"
+                    style={{ backgroundColor: '#137D67A8' }}
+                />
 
-            <div className="relative z-10 px-4  py-8 md:px-12 md:py-12">
-                <div className="flex flex-col text-center lg:text-left items-center lg:items-start  lg:justify-between gap-6">
-                    <div className="flex-1">
-                        <h2 className="text-subheading text-white mb-2">
-                            GET READY! OUR BIGGEST SALE
-                           <br className='hidden lg:block' /> EVER STARTS IN...
-                        </h2>
-                     
-                    </div>
+                <div className="relative z-10 px-4  py-8 md:px-12 md:py-12">
+                    <div className="flex flex-col text-center lg:text-left items-center lg:items-start  lg:justify-between gap-6">
+                        <div className="flex-1">
+                            <h2 className="text-subheading text-white mb-2">
+                                GET READY! OUR BIGGEST SALE
+                                <br className='hidden lg:block' /> EVER STARTS IN...
+                            </h2>
 
-                    <div className="flex gap-3 md:gap-4">
-                        {timeUnits.map((unit, index) => (
-                            <TimeBox key={index} value={unit.value} label={unit.label} />
-                        ))}
+                        </div>
+
+                        <div className="flex gap-3 md:gap-4">
+                            {timeUnits.map((unit, index) => (
+                                <TimeBox key={index} value={unit.value} label={unit.label} />
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>

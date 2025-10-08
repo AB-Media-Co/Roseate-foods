@@ -1,455 +1,187 @@
-import React, { Children, useMemo } from "react";
-import styled from "styled-components";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import React, { useId, useMemo, useRef } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay, A11y, Keyboard } from "swiper/modules";
 
-export default function UniversalCarousel({
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
+export default function UniversalCarousel(props) {
+  const {
+    mode,
+    images,
     children,
-    visibleItemsCount = 1, // how many items to show
-    isInfinite, // is it an infinite loop?
-    withIndicator,// show dots?
-    activeDotColor = "#00000096",
-    closeDotColor = "#00000033",
-    farDotColor = "#00000033",
-    arrowBgColor = "#ffffff",
-    arrowIconColor = "#484848",
-    arrowHoverBgColor = "#dddddd",
-}) {
-    const indicatorContainerRef = React.useRef(null);
-    const [timeoutInProgress, setTimeoutInProgress] = React.useState(false); // a boolean for if timeout is im progress, used to stop user from spam clicking next or back in certain conditions
 
-    /**
-     * Total item
-     */
-    const originalItemsLength = React.useMemo(() => Children.count(children), [
-        children
-    ]);
+    loop = true,
+    autoplayDelay = 2500,
+    draggable = true,
 
-    /**
-     * Is the carousel repeating it's item
-     */
-    const isRepeating = React.useMemo(
-        () => isInfinite && Children.count(children) > visibleItemsCount,
-        [children, isInfinite, visibleItemsCount]
-    );
+    showDots = true,
+    showArrows = true,
 
-    /**
-     * Current Index Item of the Carousel
-     */
-    const [currentIndex, setCurrentIndex] = React.useState(
-        isRepeating ? visibleItemsCount : 0
-    );
+    className,
+    dotsColor = "rgba(0,0,0,0.35)",
+    dotsActiveColor = "#111",
+    arrowColor = "#111",
+    arrowBg = "rgba(255,255,255,0.9)",
+    arrowHoverBg = "white",
 
-    /**
-     * Is the carousel's transition enabled
-     */
-    const [isTransitionEnabled, setTransitionEnabled] = React.useState(true);
+    prevArrowContent,
+    nextArrowContent,
 
-    /**
-     * First touch position to be used in calculation for the swipe speed
-     */
-    const [touchPosition, setTouchPosition] = React.useState(null);
+    spaceBetween = 16,
+    slidesPerViewBase = 1,
+    slidesPerViewMd = 2,
+    slidesPerViewLg = 3,
+  } = props;
 
-    /**
-     * Handle if the carousel is repeating
-     * and the currentIndex have been set to the last or first item
-     */
-    React.useEffect(() => {
-        if (isRepeating) {
-            if (
-                currentIndex === visibleItemsCount ||
-                currentIndex === originalItemsLength
-            ) {
-                setTransitionEnabled(true);
-            }
+  const uid = useId().replace(/[:]/g, "");
+  const scope = `uc-${uid}`;
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
+
+  const slides = useMemo(() => {
+    if (mode === "images") {
+      const list = images || [];
+      return list.map((img, i) => (
+        <SwiperSlide key={`${img.src}-${i}`} aria-roledescription="slide">
+          {img.linkHref ? (
+            <a href={img.linkHref} aria-label={img.alt || `slide-${i}`} style={{ display: "block" }}>
+              <img
+                src={img.src}
+                alt={img.alt || ""}
+                loading="lazy"
+                decoding="async"
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  display: "block",
+                  objectFit: "cover",
+                  borderRadius: 8,
+                }}
+              />
+            </a>
+          ) : (
+            <img
+              src={img.src}
+              alt={img.alt || ""}
+              loading="lazy"
+              decoding="async"
+              style={{
+                width: "100%",
+                height: "auto",
+                display: "block",
+                objectFit: "cover",
+                borderRadius: 8,
+              }}
+            />
+          )}
+        </SwiperSlide>
+      ));
+    }
+
+    const kids = React.Children.toArray(children);
+    return kids.map((child, i) => (
+      <SwiperSlide key={i} aria-roledescription="slide">
+        {child}
+      </SwiperSlide>
+    ));
+  }, [mode, images, children]);
+
+  if (mode === "images" && !(images && images.length)) return null;
+  if (mode === "cards" && !React.Children.count(children)) return null;
+
+  return (
+    <div className={className} data-uc-scope={scope} style={{ position: "relative" }}>
+      <style>{`
+        [data-uc-scope="${scope}"] .swiper-pagination {
+          position: relative !important;
+          bottom: auto !important;
+          margin-top: 20px !important;
+          text-align: center;
         }
-    }, [currentIndex, isRepeating, visibleItemsCount, originalItemsLength]);
-
-    React.useEffect(() => {
-        if (withIndicator) {
-            const active = indicatorContainerRef.current?.querySelector(
-                ".dots-active"
-            );
-            if (active) {
-                let index = active.getAttribute("data-index");
-                if (index !== null && indicatorContainerRef.current?.scrollTo) {
-                    indicatorContainerRef.current?.scrollTo({
-                        left: ((Number(index) - 2) / 5) * 50,
-                        behavior: "smooth"
-                    });
-                }
-            }
+        [data-uc-scope="${scope}"] .swiper-pagination-bullet { 
+          background: ${dotsColor}; 
+          opacity: 1; 
+          width: 8px;
+          height: 8px;
+          margin: 0 4px;
         }
-    }, [withIndicator, currentIndex]);
-
-    /**
-     * Move forward to the next item
-     */
-    const nextItem = () => {
-        const isOnEdgeForward = currentIndex > originalItemsLength;
-        if (isOnEdgeForward) {
-            setTimeoutInProgress(true);
+        [data-uc-scope="${scope}"] .swiper-pagination-bullet-active { background: ${dotsActiveColor}; }
+        [data-uc-scope="${scope}"] .uc-arrow {
+          position: absolute; top: 50%; transform: translateY(-50%);
+          border: none; cursor: pointer; width: 40px; height: 40px; border-radius: 999px;
+          display: grid; place-items: center; background: ${arrowBg}; color: ${arrowColor};
+          box-shadow: 0 2px 6px rgba(0,0,0,0.12); transition: background .2s ease; z-index: 10;
         }
+        [data-uc-scope="${scope}"] .uc-arrow:hover { background: ${arrowHoverBg}; }
+        [data-uc-scope="${scope}"] .uc-prev { left: 8px; }
+        [data-uc-scope="${scope}"] .uc-next { right: 8px; }
+      `}</style>
 
-        if (isRepeating || currentIndex < originalItemsLength - visibleItemsCount) {
-            setCurrentIndex((prevState) => prevState + 1);
-        }
-    };
-
-    /**
-     * Move backward to the previous item
-     */
-    const previousItem = () => {
-        const isOnEdgeBack = isRepeating
-            ? currentIndex <= visibleItemsCount
-            : currentIndex === 0;
-
-        if (isOnEdgeBack) {
-            setTimeoutInProgress(true);
-        }
-
-        if (isRepeating || currentIndex > 0) {
-            setCurrentIndex((prevState) => prevState - 1);
-        }
-    };
-
-    /**
-     * Handle when the user start the swipe gesture
-     * @param e TouchEvent
-     */
-    const handleTouchStart = (e) => {
-        // Save the first position of the touch
-        const touchDown = e.touches[0].clientX;
-        setTouchPosition(touchDown);
-    };
-
-    /**
-     * Handle when the user move the finger in swipe gesture
-     * @param e TouchEvent
-     */
-    const handleTouchMove = (e) => {
-        // Get initial location
-        const touchDown = touchPosition;
-
-        // Proceed only if the initial position is not null
-        if (touchDown === null) {
-            return;
-        }
-
-        // Get current position
-        const currentTouch = e.touches[0].clientX;
-
-        // Get the difference between previous and current position
-        const diff = touchDown - currentTouch;
-
-        // Go to next item
-        if (diff > 5) {
-            nextItem();
-        }
-
-        // Go to previous item
-        if (diff < -5) {
-            previousItem();
-        }
-
-        // Reset initial touch position
-        setTouchPosition(null);
-    };
-
-    /**
-     * Handle when carousel transition's ended
-     */
-    const handleTransitionEnd = () => {
-        if (isRepeating) {
-            if (currentIndex === 0) {
-                setTransitionEnabled(false);
-                setCurrentIndex(originalItemsLength);
-            } else if (currentIndex === originalItemsLength + visibleItemsCount) {
-                setTransitionEnabled(false);
-                setCurrentIndex(visibleItemsCount);
-            }
-        }
-
-        setTimeoutInProgress(false);
-    };
-
-    /**
-     * Render previous items before the first item
-     */
-    const extraPreviousItems = React.useMemo(() => {
-        let output = [];
-        for (let index = 0; index < visibleItemsCount; index++) {
-            output.push(Children.toArray(children)[originalItemsLength - 1 - index]);
-        }
-        output.reverse();
-        return output;
-    }, [children, originalItemsLength, visibleItemsCount]);
-
-    /**
-     * Render next items after the last item
-     */
-    const extraNextItems = React.useMemo(() => {
-        let output = [];
-        for (let index = 0; index < visibleItemsCount; index++) {
-            output.push(Children.toArray(children)[index]);
-        }
-        return output;
-    }, [children, visibleItemsCount]);
-
-    // render n (n being the count of original items / visibleItemsCount) dots
-    const renderDots = React.useMemo(() => {
-        let output = [];
-
-        const localShow = isRepeating ? visibleItemsCount : 0;
-        const localLength = isRepeating
-            ? originalItemsLength
-            : Math.ceil(originalItemsLength / visibleItemsCount);
-        const calculatedActiveIndex =
-            currentIndex - localShow < 0
-                ? originalItemsLength + (currentIndex - localShow)
-                : currentIndex - localShow;
-
-        for (let index = 0; index < localLength; index++) {
-            let className = "";
-            if (calculatedActiveIndex === index) {
-                className = "dots-active";
-            } else {
-                if (calculatedActiveIndex === 0) {
-                    if (calculatedActiveIndex + index <= 2) {
-                        className = "dots-close";
-                    } else {
-                        className = "dots-far";
-                    }
-                } else if (calculatedActiveIndex === localLength - 1) {
-                    if (Math.abs(calculatedActiveIndex - index) <= 2) {
-                        className = "dots-close";
-                    } else {
-                        className = "dots-far";
-                    }
-                } else {
-                    if (Math.abs(calculatedActiveIndex - index) === 1) {
-                        className = "dots-close";
-                    } else {
-                        className = "dots-far";
-                    }
-                }
-            }
-            output.push(<div key={index} data-index={index} className={className} />);
-        }
-
-        return output;
-    }, [currentIndex, isRepeating, originalItemsLength, visibleItemsCount]);
-
-    const isNextButtonVisible = useMemo(() => {
-        return (
-            isRepeating || currentIndex < originalItemsLength - visibleItemsCount
-        );
-    }, [isRepeating, currentIndex, originalItemsLength, visibleItemsCount]);
-
-    const isPrevButtonVisible = useMemo(() => isRepeating || currentIndex > 0, [
-        isRepeating,
-        currentIndex
-    ]);
-
-    return (
-        <StyledCarousel
-            visibleItemsCount={visibleItemsCount}
-            activeDotColor={activeDotColor}
-            closeDotColor={closeDotColor}
-            farDotColor={farDotColor}
-            arrowBgColor={arrowBgColor}
-            arrowIconColor={arrowIconColor}
-            arrowHoverBgColor={arrowHoverBgColor}
-
-        >
-            <div className={`carousel-wrapper`}>
-                {isPrevButtonVisible && (
-                    <button
-                        disabled={timeoutInProgress}
-                        className="left-arrow-button"
-                        onClick={previousItem}
-                    >
-                        <ChevronLeft color={arrowIconColor} size={20} strokeWidth={2.5} />
-                    </button>
-                )}
-                <div
-                    className={`carousel-content-wrapper`}
-                    onTouchStart={handleTouchStart}
-                    onTouchMove={handleTouchMove}
-                >
-                    <div
-                        className={`carousel-content gap-10`}
-                        style={{
-                            transform: `translateX(-${currentIndex * (97 / visibleItemsCount)
-                                }%)`,
-                            transition: !isTransitionEnabled ? "none" : undefined
-                        }}
-                        onTransitionEnd={() => handleTransitionEnd()}
-                    >
-                        {isRepeating && extraPreviousItems}
-                        {children}
-                        {isRepeating && extraNextItems}
-                    </div>
-                </div>
-                {isNextButtonVisible && (
-                    <button
-                        disabled={timeoutInProgress}
-                        className="right-arrow-button"
-                        onClick={nextItem}
-                    >
-                        <ChevronRight color={arrowIconColor} size={20} strokeWidth={2.5} />
-                    </button>
-                )}
-            </div>
-            {withIndicator && (
-                <div ref={indicatorContainerRef} className={`indicator-container relative bottom-[18px]`}>
-                    {renderDots}
-                </div>
+      {showArrows && (
+        <>
+          <button ref={prevRef} className="uc-arrow uc-prev" aria-label="Previous slide" type="button">
+            {props.prevArrowContent ?? (
+              <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M12.5 15L7.5 10L12.5 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             )}
-        </StyledCarousel>
-    );
-};
+          </button>
+          <button ref={nextRef} className="uc-arrow uc-next" aria-label="Next slide" type="button">
+            {props.nextArrowContent ?? (
+              <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M7.5 5L12.5 10L7.5 15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            )}
+          </button>
+        </>
+      )}
 
-const StyledCarousel = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-
-  .carousel-wrapper {
-    display: flex;
-    width: 100%;
-    position: relative;
-  }
-
-  .carousel-content-wrapper {
-    overflow: hidden;
-    width: 100%;
-    height: 100%;
-  }
-
-  .carousel-content {
-    display: flex;
-    transition: all 250ms linear;
-    -ms-overflow-style: none;
-    /* hide scrollbar in IE and Edge */
-    scrollbar-width: none;
-    /* hide scrollbar in Firefox */
-  }
-
-  /* hide scrollbar in webkit browser */
-
-  .carousel-content::-webkit-scrollbar,
-  .carousel-content::-webkit-scrollbar {
-    display: none;
-  }
-
-  .carousel-content > * {
-    flex-shrink: 0;
-    flex-grow: 1;
-    width: ${({ visibleItemsCount }) => `calc(91% / ${visibleItemsCount})`};
-  }
-
-.left-arrow-button,
-.right-arrow-button {
-  position: absolute;
-  z-index: 1;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background-color: ${({ arrowBgColor }) => arrowBgColor};
-  border: 1px solid #ddd;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
-    rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
-  transition: all 150ms linear;
+      <Swiper
+        modules={[Navigation, Pagination, Autoplay, A11y, Keyboard]}
+        loop={loop}
+        speed={600}
+        slidesPerView={slidesPerViewBase}
+        spaceBetween={spaceBetween}
+        breakpoints={{
+          640: { slidesPerView: slidesPerViewMd, spaceBetween },
+          1024: { slidesPerView: slidesPerViewLg, spaceBetween: spaceBetween + 4 },
+        }}
+        // interactions
+        allowTouchMove={draggable}
+        simulateTouch={draggable}
+        grabCursor={draggable}
+        keyboard={{ enabled: true }}
+        a11y={{ enabled: true }}
+        // custom navigation refs
+        navigation={showArrows ? { prevEl: prevRef.current, nextEl: nextRef.current } : false}
+        onBeforeInit={(swiper) => {
+          if (showArrows) {
+            swiper.params.navigation.prevEl = prevRef.current;
+            swiper.params.navigation.nextEl = nextRef.current;
+          }
+        }}
+        onSwiper={(swiper) => {
+          if (showArrows && swiper.navigation) {
+            swiper.navigation.init();
+            swiper.navigation.update();
+          }
+        }}
+        // dots
+        pagination={showDots ? { clickable: true } : false}
+        // modern lazy-like behavior (no Lazy module needed)
+        lazyPreloadPrevNext={2}
+        watchSlidesProgress
+        // autoplay
+        autoplay={
+          autoplayDelay && autoplayDelay > 0
+            ? { delay: autoplayDelay, disableOnInteraction: false, pauseOnMouseEnter: true }
+            : false
+        }
+      >
+        {slides}
+      </Swiper>
+    </div>
+  );
 }
-
-.left-arrow-button:hover,
-.right-arrow-button:hover {
-  background-color: ${({ arrowHoverBgColor }) => arrowHoverBgColor};
-}
-
-.left-arrow-button:focus,
-.right-arrow-button:focus {
-  outline: none;
-}
-
-.left-arrow-button {
-  left: 24px;
-}
-
-.right-arrow-button {
-  right: 24px;
-}
-
-@media (hover: none) and (pointer: coarse) {
-  .left-arrow-button,
-  .right-arrow-button {
-    display: none;
-  }
-}
-
-
-  .indicator-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin: 0 auto;
-    -ms-overflow-style: none;
-    /* hide scrollbar in IE and Edge */
-    scrollbar-width: none;
-    /* hide scrollbar in Firefox */
-  }
-
-  .indicator-container::-webkit-scrollbar,
-  .indicator-container::-webkit-scrollbar {
-    display: none;
-  }
-
-  .indicator-container {
-    max-width: 56px;
-    overflow: auto;
-  }
-
-  .indicator-container > * {
-    margin-left: 6px;
-    border-radius: 12px;
-    transition-property: all;
-    transition-duration: 250ms;
-    transition-timing-function: linear;
-  }
-
-  .indicator-container > div:first-child {
-    margin-left: 0px;
-  }
-
-  .indicator-container > .dots-active {
-    width: 12px;
-    height: 6px;
-    background-color: ${({ activeDotColor }) => activeDotColor};
-    flex-shrink: 0;
-    flex-grow: 1;
-  }
-
-  .indicator-container > .dots-close {
-    width: 6px;
-    height: 6px;
-    background-color: ${({ closeDotColor }) => closeDotColor};
-    flex-shrink: 0;
-    flex-grow: 1;
-  }
-
-  .indicator-container > .dots-far {
-    width: 4px;
-    height: 4px;
-    margin-top: 1px;
-    margin-bottom: 1px;
-    background-color: ${({ farDotColor }) => farDotColor};
-    flex-shrink: 0;
-    flex-grow: 1;
-  }
-`;

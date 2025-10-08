@@ -14,7 +14,7 @@ const FEATURES = [
 
 const WhyRoseateFarms = () => {
   return (
-    <section className=" py-12 md:py-16">
+    <section className=" py-12 md:py-16 content">
       {/* Heading */}
       <div className="text-center mb-10 md:mb-14">
         <BrandHeading accentWord="FARMS">

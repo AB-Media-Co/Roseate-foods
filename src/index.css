@@ -9,6 +9,7 @@
   "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
   --color-brand-500: #137D67;
+  --color-brand-300: #19A286;
   --color-brand-50: #137d6766;
   --color-brand-600: color-mix(in oklab, var(--color-brand-500), black 12%);
   --color-brand-400: color-mix(in oklab, var(--color-brand-500), white 12%);
@@ -110,4 +111,19 @@ html {
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0%); }
+  to { transform: translateX(-100%); }
+}
+
+@keyframes marquee2 {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0%); }
+}
+
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.333333%); }
 }
