@@ -1,16 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import UniversalCarousel from '../../../components/UniversalCarousel';
 
 const HeroSection = () => {
-  // Convert to the images shape { src, alt }
-  const images = [
-    { src: '/Home/Banner/bannerImg.png', alt: 'First image' },
-    { src: '/Home/Banner/bannerImg.png', alt: 'First image' },
-    { src: '/Home/Banner/bannerImg.png', alt: 'First image' },
-    { src: '/Home/Banner/bannerImg.png', alt: 'First image' },
-    { src: '/Home/Banner/bannerImg.png', alt: 'First image' },
-    { src: '/Home/Banner/bannerImg.png', alt: 'First image' },
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Effect to detect screen size changes
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Set initial value
+    handleResize();
+    
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+    
+    // Clean up
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Desktop images
+  const desktopImages = [
+    { src: '/Home/Banner/bannerImg2.png', alt: 'Banner Image 2' },
+    { src: '/Home/Banner/bannerImg.png', alt: 'Banner Image 1' },
   ];
+
+  // Mobile images
+  const mobileImages = [
+    { src: '/Home/Banner/banner2Mimg.png', alt: 'Mobile Banner Image 2' },
+    { src: '/Home/Banner/bannerMImg.png', alt: 'Mobile Banner Image 1' },
+  ];
+
+  // Choose images based on screen size
+  const images = isMobile ? mobileImages : desktopImages;
 
   return (
     <div className='content'>

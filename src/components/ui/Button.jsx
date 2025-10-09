@@ -15,6 +15,7 @@ const Button = ({
         default: "bg-brand-500 text-white hover:bg-brand-600 ",
         ghost: "bg-transparent hover:bg-white/10 text-current",
         link: "bg-transparent hover:underline text-current",
+        outlinebrand: "border-2 border-base-500 text-base-500 hover:text-base-500 border-current bg-transparent hover:bg-white/10",
         outline: "border-2 border-white text-white hover:text-white border-current bg-transparent hover:bg-white/10",
         solid: "bg-white text-gray-900 hover:bg-gray-100",
     };

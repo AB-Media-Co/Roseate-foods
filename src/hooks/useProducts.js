@@ -2,7 +2,7 @@ import { apiGetProducts } from "../api/storefront";
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { apiGetCollections, apiGetCollectionByHandle } from "../api/storefront";
 
-export function useProducts(first = 12) {
+export function useProducts(first = 50) {
   return useQuery({
     queryKey: ["products", first],
     queryFn: () => apiGetProducts(first),
@@ -11,10 +11,8 @@ export function useProducts(first = 12) {
 }
 
 
-// hooks/useCollections.js
-
 // basic list
-export function useCollections(first = 20) {
+export function useCollections(first=50) {
   return useQuery({
     queryKey: ["collections", first],
     queryFn: () => apiGetCollections(first),
@@ -23,7 +21,7 @@ export function useCollections(first = 20) {
 }
 
 // infinite list (optional)
-export function useInfiniteCollections(pageSize = 20) {
+export function useInfiniteCollections(pageSize = 50) {
   return useInfiniteQuery({
     queryKey: ["collections-infinite", pageSize],
     queryFn: ({ pageParam }) => apiGetCollections(pageSize, pageParam),
@@ -34,7 +32,7 @@ export function useInfiniteCollections(pageSize = 20) {
 }
 
 // one collection + products
-export function useCollection(handle, productsFirst = 24) {
+export function useCollection(handle, productsFirst = 50) {
   return useInfiniteQuery({
     enabled: !!handle,
     queryKey: ["collection", handle, productsFirst],

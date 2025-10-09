@@ -5,12 +5,14 @@ import Home from "./Pages/Home/Home";
 import Nav from "./components/Nav";
 import { StorefrontProvider } from "./context/StorefrontContext";
 import OurStory from "./Pages/OurStory/OurStory";
+import ProductPage from "./Pages/ProductPage/ProductPage";
+import Footer from "./components/Footer";
 
 function App() {
   return (
     <Router>
       <StorefrontProvider
-        productsFirst={12}
+        productsFirst={50}
         collectionsFirst={20}
         infiniteCollectionsPageSize={20}
         selectedCollectionHandle={null} // or a handle like "new-arrivals"
@@ -21,8 +23,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/our-story" element={<OurStory />} />
-          {/* add more routes here */}
+          <Route path="/product/:handle" element={<ProductPage />} />
         </Routes>
+        <Footer/>
       </StorefrontProvider>
     </Router>
   );

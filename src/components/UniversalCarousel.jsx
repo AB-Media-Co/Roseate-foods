@@ -15,7 +15,7 @@ export default function UniversalCarousel(props) {
     loop = true,
     autoplayDelay = 2500,
     draggable = true,
-
+    autoplay,
     showDots = true,
     showArrows = true,
 
@@ -124,14 +124,14 @@ export default function UniversalCarousel(props) {
           <button ref={prevRef} className="uc-arrow uc-prev" aria-label="Previous slide" type="button">
             {props.prevArrowContent ?? (
               <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
-                <path d="M12.5 15L7.5 10L12.5 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M12.5 15L7.5 10L12.5 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             )}
           </button>
           <button ref={nextRef} className="uc-arrow uc-next" aria-label="Next slide" type="button">
             {props.nextArrowContent ?? (
               <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
-                <path d="M7.5 5L12.5 10L7.5 15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M7.5 5L12.5 10L7.5 15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             )}
           </button>
@@ -168,17 +168,20 @@ export default function UniversalCarousel(props) {
             swiper.navigation.update();
           }
         }}
-        // dots
         pagination={showDots ? { clickable: true } : false}
-        // modern lazy-like behavior (no Lazy module needed)
         lazyPreloadPrevNext={2}
         watchSlidesProgress
-        // autoplay
         autoplay={
-          autoplayDelay && autoplayDelay > 0
-            ? { delay: autoplayDelay, disableOnInteraction: false, pauseOnMouseEnter: true }
-            : false
+          autoplay === false
+            ? false
+            : {
+              delay: autoplayDelay || 2500,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: true,
+            }
         }
+
+
       >
         {slides}
       </Swiper>

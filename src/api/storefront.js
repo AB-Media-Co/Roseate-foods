@@ -12,6 +12,7 @@ import {
 
 export async function apiGetProducts(first) {
   const data = await shopify.request(GET_PRODUCTS, { first });
+  console.log("Products data:", data); // Debugging line
   return data.products?.edges?.map((e) => e.node) ?? [];
 }
 
@@ -58,7 +59,7 @@ export async function apiGetCartById(id) {
 
 
 
-export async function apiGetCollections(first = 20, after) {
+export async function apiGetCollections(first = 50, after) {
   const data = await shopify.request(GET_COLLECTIONS, { first, after });
   const conn = data.collections ?? { edges: [], pageInfo: {} };
   return {
@@ -67,7 +68,7 @@ export async function apiGetCollections(first = 20, after) {
   };
 }
 
-export async function apiGetCollectionByHandle(handle, productsFirst = 24, productsAfter) {
+export async function apiGetCollectionByHandle(handle, productsFirst = 50, productsAfter) {
   const data = await shopify.request(GET_COLLECTION_BY_HANDLE, {
     handle,
     productsFirst,

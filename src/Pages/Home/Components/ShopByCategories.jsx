@@ -43,7 +43,7 @@ function CategoryCard({ product }) {
 
 export default function ShopByCategories() {
   const { collections, collectionsLoading } = useStorefront();
-  console.log(collections)
+  // console.log(collections)
 
   if (collectionsLoading) return <div>Loading...</div>;
 
