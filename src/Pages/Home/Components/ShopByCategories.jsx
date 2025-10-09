@@ -2,11 +2,13 @@ import React from "react";
 import { BrandHeading } from "../../../components/BrandHeading";
 import { useStorefront } from "../../../context/StorefrontContext";
 import UniversalCarousel from "../../../components/UniversalCarousel";
+import { useNavigate } from "react-router-dom";
 
 /* === Single round image + label === */
 function CategoryCard({ product }) {
   const img = product?.image?.url;
   const title = (product?.title || "Product").toUpperCase();
+  const navigate = useNavigate()
 
   return (
     <article className="flex flex-col items-center justify-start">
@@ -18,9 +20,10 @@ function CategoryCard({ product }) {
           ring-2 ring-[#0d9488]
           shadow-sm
           bg-white
-          transition-transform duration-200 ease-out hover:scale-[1.03]
+          transition-transform duration-200 ease-out cursor-pointer hover:scale-[1.03]
         "
         style={{ display: "grid", placeItems: "center" }}
+        onClick={() => navigate(`/collection/${product.handle}`)}
       >
         {img && (
           <img

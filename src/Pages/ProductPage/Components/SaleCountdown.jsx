@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Button from '../../../components/ui/Button';
+import { useNavigate } from 'react-router-dom';
 
 const TimeBox = ({ value, label }) => (
     <div className="flex flex-col items-center justify-center  bg-opacity-10 backdrop-blur-sm border-2 border-white border-opacity-30 rounded-lg p-3 md:p-4 min-w-[70px] md:min-w-[85px]">
@@ -14,6 +15,7 @@ const TimeBox = ({ value, label }) => (
 
 export default function SaleCountdown() {
     const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
+    const navigate = useNavigate()
 
     useEffect(() => {
         const startTimeKey = 'saleStartTime';
@@ -90,6 +92,7 @@ export default function SaleCountdown() {
                                 variant="outline"
                                 size="btn"
                                 className=""
+                                onClick={() => navigate('/collection/allproducts')}
                             >
                                 View All The Products
                             </Button>

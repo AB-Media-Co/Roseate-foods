@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import Button from "./ui/Button";
 import { useStorefront } from "../context/StorefrontContext";
+import { useCart } from "../state/CartProvider";
 
 /* --------------------------------- Shared --------------------------------- */
 
@@ -30,7 +31,7 @@ function SkeletonItem() {
 const ProductRow = React.memo(function ProductRow({ p }) {
   return (
     <a
-      href={`/products/${p.handle}`}
+      href={`/collection/products/${p.handle}`}
       className="group relative flex items-center gap-3 rounded-lg px-3 py-2 transition
                  hover:bg-gradient-to-r hover:from-brand-50/80 hover:to-transparent
                  focus:outline-none focus:ring-2 focus:ring-brand-300 will-change-transform transform-gpu"
@@ -227,7 +228,8 @@ const Nav = () => {
   const [isMobileProductsOpen, setIsMobileProductsOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
-  const { products, productsLoading, cartItemCount } = useStorefront();
+  const { products, productsLoading } = useStorefront();
+  const { totalQuantity } = useCart();
 
   const productList = useMemo(() => products ?? [], [products]);
 
@@ -261,9 +263,11 @@ const Nav = () => {
 
             <button aria-label="Cart" className="relative p-1">
               <img src="/cartM.svg" alt="Cart" className="h-6 w-6" />
-              <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] flex items-center justify-center font-medium">
-                2
-              </span>
+              {totalQuantity > 0 && (
+                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] flex items-center justify-center font-medium">
+                  {totalQuantity}
+                </span>
+              )}
             </button>
           </div>
         </nav>
@@ -416,9 +420,11 @@ const Nav = () => {
                   className="relative text-brand-500 hover:text-brand-600 hover:bg-transparent"
                 >
                   <img src="/cart.svg" alt="Cart" />
-                  <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-xs flex items-center justify-center font-medium">
-                    {cartItemCount}
-                  </span>
+                  {totalQuantity > 0 && (
+                    <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-xs flex items-center justify-center font-medium">
+                      {totalQuantity}
+                    </span>
+                  )}
                 </Button>
               </div>
             </div>

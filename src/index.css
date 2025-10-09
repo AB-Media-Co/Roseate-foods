@@ -126,3 +126,70 @@ body {
   0% { transform: translateX(0); }
   100% { transform: translateX(-33.333333%); }
 }
+
+/* -------------------------------------- */
+/* Custom Toast Styling                   */
+/* -------------------------------------- */
+
+/* Toast Container */
+.custom-toast-container {
+  @apply font-sans;
+}
+
+/* Individual Toast */
+.custom-toast {
+  @apply rounded-lg shadow-lg border border-gray-100;
+  font-family: var(--font-sans);
+}
+
+/* Success Toast - Brand Green */
+.Toastify__toast--success {
+  @apply bg-white border-l-4 border-brand-500;
+}
+
+.Toastify__toast--success .Toastify__toast-icon {
+  color: var(--color-brand-500);
+}
+
+/* Error Toast - Red */
+.Toastify__toast--error {
+  @apply bg-white border-l-4 border-red-500;
+}
+
+.Toastify__toast--error .Toastify__toast-icon {
+  @apply text-red-500;
+}
+
+/* Toast Body */
+.custom-toast-body {
+  @apply text-gray-800 font-medium;
+  font-size: var(--text-body);
+  line-height: 1.4;
+}
+
+/* Progress Bar */
+.custom-toast-progress {
+  background: linear-gradient(90deg, var(--color-brand-500), var(--color-brand-300));
+}
+
+/* Toast animations */
+.Toastify__toast {
+  @apply backdrop-blur-sm;
+}
+
+/* Close button */
+.Toastify__close-button {
+  @apply text-gray-400 hover:text-gray-600 transition-colors;
+}
+
+/* Success toast with custom styling */
+.Toastify__toast--success .custom-toast-body::before {
+  content: "";
+  @apply inline-block w-2 h-2 bg-brand-500 rounded-full mr-2;
+}
+
+/* Error toast with custom styling */
+.Toastify__toast--error .custom-toast-body::before {
+  content: "";
+  @apply inline-block w-2 h-2 bg-red-500 rounded-full mr-2;
+}

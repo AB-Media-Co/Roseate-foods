@@ -44,6 +44,7 @@ const Button = ({
     // Otherwise render as button
     return (
         <button
+            type={props.type || 'button'}
             className={combinedClassName}
             {...props}
         >

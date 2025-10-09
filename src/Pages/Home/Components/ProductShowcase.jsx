@@ -3,7 +3,9 @@ import { BrandHeading } from '../../../components/BrandHeading';
 import { useStorefront } from '../../../context/StorefrontContext';
 import Button from '../../../components/ui/Button';
 import UniversalCarousel from '../../../components/UniversalCarousel';
+import AddToCartButton from '../../../components/AddToCartButton';
 import { useNavigate } from "react-router-dom";
+import { getDiscountLabel, getDiscountPercent, isNewProduct } from '../../../utils/price';
 
 const ProductShowcase = () => {
   const { products, productsLoading } = useStorefront();
@@ -43,19 +45,31 @@ const ProductShowcase = () => {
   const ProductCard = ({ product }) => {
     const image = product.featuredImage?.url;
     const price = product.priceRange?.minVariantPrice?.amount || "349";
-    const comparePrice = product.compareAtPriceRange?.minVariantPrice?.amount;
+    const comparePrice = product.compareAtPriceRange?.maxVariantPrice?.amount;
     const currency = '₹';
-    const isOnSale = comparePrice && parseFloat(comparePrice) > parseFloat(price);
-    const isNew = product.tags?.includes('new') || false;
-    const discount = isOnSale ? Math.round((1 - parseFloat(price) / parseFloat(comparePrice)) * 100) : 0;
     const rating = product.rating || 5;
     const reviewCount = product.reviewCount || 3;
+    const variantEdges = product?.variants?.edges || [];
+    const firstAvailable = variantEdges.find(e => e?.node?.availableForSale)?.node?.id;
+    const variantId = firstAvailable || variantEdges?.[0]?.node?.id || product?.variants?.[0]?.id || null;
     console.log("Product in ProductCard:", product);
+    const newItem = isNewProduct(product);
+
+    console.log("Is New Item:", price, comparePrice);
+    const discountPct = getDiscountPercent(price, comparePrice, {
+      round: 'round',   // 'floor' | 'ceil' | 'round'
+      minPct: 1,        // <1% not shown
+      maxPct: 95,       // clamp
+      // step: 5,       // enable if you want 5%-steps (e.g., 33% => 35%)
+    });
+
+    const discountLabel = getDiscountLabel(price, comparePrice);
 
 
     // Redirect function
-    const handleRedirect = (handle) => {
-      navigate(`/product/${handle}`);
+    const handleRedirect = (prod) => {
+      const h = prod?.handle || (prod?.title ? encodeURIComponent(prod.title) : '');
+      navigate(`/collection/product/${h}`);
     };
 
     // Function to render star rating
@@ -73,7 +87,7 @@ const ProductShowcase = () => {
 
     return (
       <div className="bg-white rounded-lg  overflow-hidden border border-gray-200 flex flex-col shadow-sm hover:shadow-md transition-shadow"
-       
+
       >
         {/* Product Image with Badges */}
         <div className="relative">
@@ -90,15 +104,17 @@ const ProductShowcase = () => {
           )}
 
           {/* Sale Badge */}
-          {isOnSale && (
-            <div className="absolute top-0 left-0 bg-red-500 text-white px-2 py-0.5 text-xs font-medium">
-              UP TO -{discount}%
+          {discountPct ? (
+            <div className="absolute top-0 right-0 bg-brand-500 text-white text-xs px-2 py-1 ">
+              {discountLabel}
             </div>
-          )}
+          ) : null}
+
+
 
           {/* New Badge */}
-          {isNew && !isOnSale && (
-            <div className="absolute top-0 right-0 bg-green-600 text-white px-2 py-0.5 text-xs font-medium">
+          {newItem && (
+            <div className="absolute top-8 right-0 bg-brand-600 text-white px-2 py-0.5 text-xs font-medium">
               New
             </div>
           )}
@@ -113,7 +129,7 @@ const ProductShowcase = () => {
 
           {/* Title */}
           <h3 className="text-brand-500 hover:underline cursor-pointer font-medium mt-1 line-cl"
-           onClick={() => handleRedirect(product.title)}
+            onClick={() => handleRedirect(product)}
           >
             {product.title || "California Almonds"}
           </h3>
@@ -128,18 +144,18 @@ const ProductShowcase = () => {
 
           {/* Button */}
           <div className="mt-auto pt-2">
-            <Button
+            <AddToCartButton
+              variantId={variantId}
+              quantity={1}
+              productTitle={product.title}
               variant="outlinebrand"
               size="btn"
-              className="w-full border-brand-500 text-brand-500 hover:bg-brand-500 "
-              onClick={(e) => {
-                console.log("Buy Now clicked for product:", product);
-                e.stopPropagation();
-                handleRedirect(product.title);
-              }}
+              className="w-full border-brand-500 text-brand-500 "
+              onSuccess={() => console.log("Added successfully!")}
+
             >
               Buy Now
-            </Button>
+            </AddToCartButton>
           </div>
 
           {/* Action Icons */}
@@ -194,7 +210,8 @@ const ProductShowcase = () => {
             variant="default"
             size="btn"
             className="border-brand-500 text-brand-500 hover:bg-brand-500 hover:text-white"
-            onClick={() => window.location.href = '/products'}
+            onClick={() => navigate('/collection/allproducts')}
+
           >
             View All
           </Button>

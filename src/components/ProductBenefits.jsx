@@ -1,32 +1,7 @@
 import React from 'react'
 
-const ProductBenefits = () => {
-  const benefits = [
-    {
-      id: 1,
-      icon: '/productPage/quality.svg',
-      title: 'Premium Quality',
-      subtitle: '100% Quality Guarantee'
-    },
-    {
-      id: 2,
-      icon: '/productPage/shipping.svg',
-      title: 'Swift Shipping',
-      subtitle: 'Delivering Across PAN'
-    },
-    {
-      id: 3,
-      icon: '/productPage/easy-return.svg',
-      title: 'Easy Return',
-      subtitle: 'Hassle Return Policy'
-    },
-    {
-      id: 4,
-      icon: '/productPage/24by7.svg',
-      title: '24/7 Support',
-      subtitle: 'Support every time'
-    }
-  ]
+const ProductBenefits = ({benefits}) => {
+
 
   return (
     <section className="py-8 bg-white ">

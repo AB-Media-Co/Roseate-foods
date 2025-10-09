@@ -15,8 +15,6 @@ const Footer = () => {
 
   return (
     <footer className="relative bg-cover bg-center" style={{ backgroundImage: 'url(/footer.png)' }}>
-      {/* Green overlay */}
-      {/* <div className="absolute inset-0 bg-brand-500 bg-opacity-80"></div> */}
 
       {/* Content container */}
       <div className="relative z-10">

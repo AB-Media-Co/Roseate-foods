@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useCollection } from "../../../hooks/useProducts";
 import { BrandHeading } from '../../../components/BrandHeading';
-import Button from '../../../components/ui/Button';
+import AddToCartButton from '../../../components/AddToCartButton';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 // Example: icon imports – change to your library if needed
 import { Eye, Share2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const BestSellerOfMonth = () => {
   const { data, isLoading, error } = useCollection("best-seller", 8);
@@ -36,7 +37,7 @@ const BestSellerOfMonth = () => {
 
   // Product Card
   const ProductCard = ({ product }) => {
-    console.log(product)
+    const navigate = useNavigate()
     const [quantity, setQuantity] = useState(1);
     const image = product.featuredImage?.url;
     const price = product.priceRange?.minVariantPrice?.amount || "349";
@@ -45,6 +46,9 @@ const BestSellerOfMonth = () => {
     const isOnSale = comparePrice && parseFloat(comparePrice) > parseFloat(price);
     const reviewCount = product.reviewCount || 3;
     const rating = product.rating || 5;
+    const variantEdges = product?.variants?.edges || [];
+    const firstAvailable = variantEdges.find(e => e?.node?.availableForSale)?.node?.id;
+    const variantId = firstAvailable || variantEdges?.[0]?.node?.id || product?.variants?.[0]?.id || null;
 
     const renderStars = r => (
       [...Array(5)].map((_, i) =>
@@ -84,7 +88,9 @@ const BestSellerOfMonth = () => {
             </span>
             <span className="text-lg font-bold text-[var(--color-brand-500)]">{currency}{price}</span>
           </div>
-          <h3 className="font-semibold text-brand-500 hover:underline cursor-pointer mt-1 mb-1 text-body min-h-6">
+          <h3 className="font-semibold text-brand-500 hover:underline cursor-pointer mt-1 mb-1 text-body min-h-6"
+            onClick={() => navigate(`/collection/product/${product.handle || encodeURIComponent(product.title)}`)}
+          >
             {product.title || "California Almonds"}
           </h3>
           <div className="flex items-center mt-1 mb-2">
@@ -100,13 +106,16 @@ const BestSellerOfMonth = () => {
               <button onClick={() => setQuantity(q => q + 1)} className="px-2 text-[var(--color-brand-500)]">+</button>
             </div>
           </div>
-          <Button
+          <AddToCartButton
+            variantId={variantId}
+            quantity={quantity}
+            productTitle={product.title}
+            className="w-full border-[var(--color-brand-500)] text-[var(--color-brand-500)] font-semibold "
             variant="outlinebrand"
             size="btn"
-            className="w-full border-[var(--color-brand-500)] text-[var(--color-brand-500)] font-semibold "
           >
             Add To Cart
-          </Button>
+          </AddToCartButton>
         </div>
       </div>
     );

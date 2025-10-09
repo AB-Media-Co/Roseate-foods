@@ -1,33 +1,96 @@
-export const GET_PRODUCTS = `
+export const PRODUCT_CARD_FIELDS = /* GraphQL */ `
+fragment ProductCardFields on Product {
+  id
+  handle
+  title
+  vendor
+  productType
+  tags
+  createdAt
+  updatedAt
+  availableForSale
+  totalInventory
+
+  # 1) Hero image
+  featuredImage {
+    url
+    altText
+    width
+    height
+  }
+
+
+  # 3) Modern media gallery (images + video + externalVideo + 3D)
+  media(first: 10) {
+    edges {
+      node {
+        mediaContentType
+        alt
+        previewImage {
+          url(transform: { preferredContentType: WEBP, maxWidth: 1600 })
+          altText
+          width
+          height
+        }
+        ... on MediaImage {
+          image {
+            url(transform: { preferredContentType: WEBP, maxWidth: 1600 })
+            altText
+            width
+            height
+          }
+        }
+        ... on Video {
+          sources {
+            url
+            mimeType
+          }
+        }
+        ... on ExternalVideo {
+          embeddedUrl
+          host
+        }
+        ... on Model3d {
+          sources {
+            url
+            mimeType
+          }
+        }
+      }
+    }
+  }
+
+  priceRange { minVariantPrice { amount currencyCode } }
+  compareAtPriceRange { maxVariantPrice { amount currencyCode } }
+
+
+
+  seo { title description }
+
+  # Metafields (as you had)
+  fssai: metafield(namespace:"legal", key:"fssai_number") { value }
+  ingredients: metafield(namespace:"info", key:"ingredients") { value }
+  allergens: metafield(namespace:"info", key:"allergens") { value }
+  nutrition: metafield(namespace:"info", key:"nutrition_table") { value }
+  mfgDate: metafield(namespace:"legal", key:"mfg_date") { value }
+  expDate: metafield(namespace:"legal", key:"expiry_date") { value }
+  origin: metafield(namespace:"legal", key:"country_of_origin") { value }
+  netQty: metafield(namespace:"legal", key:"net_quantity") { value }
+
+  productRating: metafield(namespace:"reviews", key:"rating") { value }
+  productRatingCount: metafield(namespace:"reviews", key:"rating_count") { value }
+}
+`;
+
+
+
+export const GET_PRODUCTS = /* GraphQL */ `
+  ${PRODUCT_CARD_FIELDS}
   query GetProducts($first: Int!) {
     products(first: $first) {
       edges {
         node {
-          id
-          title
-          description
-          featuredImage {
-            url
-            altText
-          }
-          priceRange {
-            minVariantPrice {
-              amount
-              currencyCode
-            }
-          }
-          compareAtPriceRange {
-            maxVariantPrice { amount currencyCode }
-          }
-          variants(first: 1) {
-            edges {
-              node {
-                id
-              }
-            }
-          }
-          productRating: metafield(namespace: "reviews", key: "rating") { value }
-          productRatingCount: metafield(namespace: "reviews", key: "rating_count") { value }
+          ...ProductCardFields
         }
       }
     }
@@ -267,8 +330,6 @@ export const GET_CART_BY_ID = `
 `;
 
 
-
-
 // List collections (paged)
 export const GET_COLLECTIONS = `
   query GetCollections($first: Int!, $after: String) {
@@ -289,7 +350,8 @@ export const GET_COLLECTIONS = `
 `;
 
 // One collection by handle + its products (paged)
-export const GET_COLLECTION_BY_HANDLE = `
+export const GET_COLLECTION_BY_HANDLE = /* GraphQL */ `
+  ${PRODUCT_CARD_FIELDS}
   query GetCollectionByHandle(
     $handle: String!
     $productsFirst: Int!
@@ -305,12 +367,7 @@ export const GET_COLLECTION_BY_HANDLE = `
         edges {
           cursor
           node {
-            id
-            handle
-            title
-            featuredImage { url altText }
-            priceRange { minVariantPrice { amount currencyCode } }
-            variants(first: 1) { edges { node { id } } }
+            ...ProductCardFields
           }
         }
         pageInfo { hasNextPage endCursor }
