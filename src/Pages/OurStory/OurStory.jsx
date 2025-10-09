@@ -1,57 +1,17 @@
 import React from "react";
 import OurstoryFarms from "./Components/OurstoryFarms";
+import AboutConTent from "./Components/AboutContent";
 import { BrandHeading } from "../../components/BrandHeading";
+import MadeByPeople from "./Components/MadeByPeople";
+import Banner from "./Components/Banner";
 
 const OurStory = () => {
   return (
     <div className="">
-      <div className="w-100vw">
-        <img src="./Home/Banner/About-banner.webp" alt="" />
-      </div>
-      <div className="content h-[300px] flex justify-center items-center text-[20px]">
-        <p className="p-[10px]">
-          At Roseate Farms, we are passionate about delivering the finest dry
-          fruits, spices, and pickles that celebrate nature’s bounty. From the
-          sun-kissed orchards to your kitchen, every product is carefully
-          sourced, handpicked, and crafted to ensure premium quality, freshness,
-          and authentic taste. We believe in the power of natural goodness. Our
-          dry fruits are rich in nutrition, our spices awaken the senses, and
-          our pickles are made using traditional recipes that bring a burst of
-          flavour to every meal. Every item is a testament to our commitment to
-          health, taste, and purity. Our journey is rooted in trust,
-          transparency, and excellence. We work closely with farmers and
-          artisans, ensuring ethical practices and sustainable sourcing. At
-          Roseate Farms, it’s not just about product sit's about creating a
-          wholesome experience for our customers, making every meal healthier,
-          tastier, and more memorable.
-        </p>
-      </div>
-        <div className="text-center mt-10">
-          <BrandHeading accentWord="STORY">OUR</BrandHeading>
-            <div className="flex justify-center items-center w-full content">
-                <div className="w-[50%] text-[20px] text-left">
-                    <p>Roseate Farms began with a simple belief: that the best flavours come from nature, nurtured with care. What started as a small passion for quality dry fruits, spices, and pickles has grown into a journey dedicated to bringing fresh, wholesome, and authentic products to every home. Rooted in tradition but inspired by modern tastes, we carefully select each ingredient, ensuring it meets the highest standards of purity, nutrition, and taste. From working closely with farmers to handcrafting our products, every step reflects our commitment to quality, sustainability, and authenticity. Our story is about bringing people closer to nature, enhancing meals, and creating moments of joy and health. At Roseate Farms, it’s more than just food it’s a celebration of flavours, care, and trust. From our farms to your family, every product carries a promise of excellence.</p>
-                </div>
-                <div className="w-[50%] p-16">
-                    <img src="./Home\Assets\684126be-b2c0-4fed-a15a-e469d2b2cb3c 1.webp" alt="" />
-                </div>
-            </div>
-        </div>
+      <Banner />
+      <AboutConTent />
       <OurstoryFarms />
-      <div className="text-center mt-10 mb-10">
-          <BrandHeading accentWord="(MEET THE ROSEATE TEAM)">MADE BY PEOPLE</BrandHeading>
-            <div className="flex justify-between items-center w-full content mt-24">
-                <div className="w-[45%]">
-                    <img src="./Home\Assets\people.svg" alt="" />
-                </div>
-                <div className="w-[48%] text-[20px] text-left">
-                    <p>We fundamentally believe that food simply tastes better when the people making it genuinely care. This isn't just a business philosophy; it's a personal guarantee from every member of our team. From the moment our field hands carefully tend the organic soil, to the detailed work of our sorters ensuring only the finest ingredients are selected, and finally to the practiced hands of our makers, the entire process is treated with reverence. Each batch is handled with the personal care and high quality they would demand for their own family table. That unwavering, human dedication is what you taste in every bite.</p>
-                </div>
-            </div>
-        </div>
-      <div>
-
-      </div>
+      <MadeByPeople />
     </div>
   );
 };
