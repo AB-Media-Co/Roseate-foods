@@ -1,7 +1,7 @@
 export const BrandHeading = ({ 
     children, 
     accentWord, 
-    className = "text-subheading text-brand-500 uppercase",
+    className = "text-subheading text-brand-500 uppercase text",
     accentClassName = "font-knewave",
     as: Component = "h2"
   }) => {
