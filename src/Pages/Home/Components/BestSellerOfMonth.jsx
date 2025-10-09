@@ -134,12 +134,8 @@ const BestSellerOfMonth = () => {
 
       <div className="content relative z-10">
         <div className="text-center mb-10 md:mb-14">
-          <h2 className="text-heading">
-            EXPLORE BEST{" "}
-            <span className="font-knewave text-[var(--color-brand-500)]">
-              SELLERS THIS MONTH
-            </span>
-          </h2>
+          <BrandHeading accentWord="SELLERS THIS MONTH">EXPLORE BEST</BrandHeading>
+
         </div>
         {/* Carousel */}
         <div className="relative">
