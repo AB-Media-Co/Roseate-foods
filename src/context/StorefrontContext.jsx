@@ -29,11 +29,11 @@ import React, {
   
   export function StorefrontProvider({
     children,
-    productsFirst = 12,
-    collectionsFirst = 20,
-    infiniteCollectionsPageSize = 20,
+    productsFirst = 50,
+    collectionsFirst = 50,
+    infiniteCollectionsPageSize = 50,
     selectedCollectionHandle = null,
-    collectionProductsFirst = 24,
+    collectionProductsFirst = 50,
   }) {
     /* ---------------------------- Products / Collections ---------------------------- */
     const productsQ = useProducts(productsFirst);

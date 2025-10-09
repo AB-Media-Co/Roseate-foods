@@ -49,7 +49,7 @@ const ProductRow = React.memo(function ProductRow({ p }) {
         />
       </div>
       <div className="min-w-0">
-        <div className="truncate font-medium text-gray-900 capitalize">
+        <div className="hover:underline font-medium text-gray-900 capitalize">
           {p.title}
         </div>
         <div className="text-xs text-gray-500">View details</div>

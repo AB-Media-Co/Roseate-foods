@@ -9,7 +9,7 @@ const FEATURES = [
   { title: "NO PRESERVATIVES", icon: "/Home/farms/preservation.svg" },
   { title: "SUSTAINABLE FARMING", icon: "/Home/farms/farming.svg" },
 ];
-
+ 
 
 
 const WhyRoseateFarms = () => {

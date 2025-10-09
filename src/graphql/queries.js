@@ -16,6 +16,9 @@ export const GET_PRODUCTS = `
               currencyCode
             }
           }
+          compareAtPriceRange {
+            maxVariantPrice { amount currencyCode }
+          }
           variants(first: 1) {
             edges {
               node {
@@ -23,11 +26,16 @@ export const GET_PRODUCTS = `
               }
             }
           }
+          productRating: metafield(namespace: "reviews", key: "rating") { value }
+          productRatingCount: metafield(namespace: "reviews", key: "rating_count") { value }
         }
       }
     }
   }
 `;
+
+
+
 
 export const CREATE_CART = `
   mutation CreateCart($input: CartInput!) {

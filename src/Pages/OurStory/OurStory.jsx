@@ -11,7 +11,7 @@ const OurStory = () => {
       <Banner />
       <AboutConTent />
       <OurstoryFarms />
-      <MadeByPeople />
+      <MadeByPeople />     
     </div>
   );
 };
