@@ -1,8 +1,18 @@
 import React from 'react'
 import Button from './ui/Button'
 import { BrandHeading } from './BrandHeading'
+import { StarburstBadge } from './StarburstBadge'
+import { MapPin, Mail, Facebook, Instagram, Twitter, Youtube, Linkedin } from 'lucide-react';
 
 const Footer = () => {
+  const FEATURES = [
+    { title: "100% ORGANIC", icon: "/ProductNature.svg" },
+    { title: "TRADITIONALLY HANDCRAFTED", icon: "/productJars.svg" },
+    { title: "FARM TO TABLE FRESHNESS", icon: "/farm.svg" },
+    { title: "NO PRESERVATIVES", icon: "/productLeaf.svg" },
+    { title: "SUSTAINABLE FARMING", icon: "/susFarming.svg" },
+  ];
+
   return (
     <footer className="relative bg-cover bg-center" style={{ backgroundImage: 'url(/footer.png)' }}>
       {/* Green overlay */}
@@ -21,66 +31,29 @@ const Footer = () => {
               WHY ROSEATE
             </BrandHeading>
 
-            {/* Features Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-8 max-w-5xl mx-auto">
-              {/* 100% Organic */}
-              <div className="flex flex-col items-center">
-                <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-4">
-                  {/* Leaf icon placeholder */}
-                  <div className="w-10 h-10 bg-brand-500 rounded"></div>
-                </div>
-                <h3 className="text-white font-semibold text-small uppercase tracking-wide">100% ORGANIC</h3>
-              </div>
-
-              {/* Traditionally Handcrafted */}
-              <div className="flex flex-col items-center">
-                <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-4">
-                  {/* Jar icon placeholder */}
-                  <div className="w-10 h-10 bg-brand-500 rounded"></div>
-                </div>
-                <h3 className="text-white font-semibold text-small uppercase tracking-wide text-center">TRADITIONALLY<br />HANDCRAFTED</h3>
-              </div>
-
-              {/* Farm to Table */}
-              <div className="flex flex-col items-center">
-                <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-4">
-                  {/* Farm to table icon placeholder */}
-                  <div className="w-10 h-10 bg-brand-500 rounded"></div>
-                </div>
-                <h3 className="text-white font-semibold text-small uppercase tracking-wide text-center">FARM TO TABLE<br />FRESHNESS</h3>
-              </div>
-
-              {/* No Preservatives */}
-              <div className="flex flex-col items-center">
-                <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-4">
-                  {/* Leaf icon placeholder */}
-                  <div className="w-10 h-10 bg-brand-500 rounded"></div>
-                </div>
-                <h3 className="text-white font-semibold text-small uppercase tracking-wide">NO PRESERVATIVES</h3>
-              </div>
-
-              {/* Sustainable Farming */}
-              <div className="flex flex-col items-center">
-                <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-4">
-                  {/* Sustainable icon placeholder */}
-                  <div className="w-10 h-10 bg-brand-500 rounded"></div>
-                </div>
-                <h3 className="text-white font-semibold text-small uppercase tracking-wide text-center">SUSTAINABLE<br />FARMING</h3>
-              </div>
+            <div className="flex items-center no-scrollbar justify-between gap-10 overflow-hidden overflow-x-auto">
+              {FEATURES.map((feature) => (
+                <StarburstBadge
+                  starburstImage='/footerBadge.svg'
+                  key={feature.title}
+                  title={feature.title}
+                  icon={feature.icon}
+                  titleClassName="text-small font-semibold text-white text-center tracking-wide"
+                />
+              ))}
             </div>
           </div>
         </div>
 
-
         {/* Newsletter Section */}
         <div className="bg-brand-600 py-8 mx-8 rounded-4xl">
           <div className="content">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-              <div className='flex flex-col gap-2 '>
-                <div className="text-white text-center lg:text-left">
+            <div className="flex flex-col lg:flex-row items-start justify-between gap-8 mb-8">
+              <div className='flex flex-col gap-4 flex-1'>
+                <div className="text-white">
                   <h3 className="text-body font-semibold uppercase tracking-wide">SUBSCRIBE TO OUR NEWSLETTER FOR UPDATES AND SPECIAL OFFERS!</h3>
                 </div>
-                <div className="flex flex-col sm:flex-row gap-3 bg-white justify-between p-2 rounded-full">
+                <div className="flex flex-col sm:flex-row gap-3 bg-white justify-between p-2 rounded-full max-w-md">
                   <input
                     type="email"
                     placeholder="Enter your email"
@@ -90,10 +63,18 @@ const Footer = () => {
                     Subscribe
                   </Button>
                 </div>
-
+                
+                {/* FSSAI Logo */}
+                <div className="mt-4">
+                  <div className="w-24 h-16 bg-white rounded mb-2 flex items-center justify-center">
+                    <span className="text-brand-500 text-xs font-bold">FSSAI</span>
+                  </div>
+                  <p className="text-white text-small">LIC NO: 13325008000620</p>
+                </div>
               </div>
-              <div className="text-white text-small text-center  lg:text-right">
-                <div className="flex items-start gap-2 mb-2">
+              
+              <div className="text-white text-small flex flex-col gap-3">
+                <div className="flex items-start gap-2">
                   <div className="w-4 h-4 bg-white rounded-full mt-0.5 flex-shrink-0"></div>
                   <span>Plot No. 137, Ground Floor, Plot St. Sec 2, Bawana Delhi,<br />North West - Delhi-110039</span>
                 </div>
@@ -101,22 +82,24 @@ const Footer = () => {
                   <div className="w-4 h-4 bg-white rounded-full flex-shrink-0"></div>
                   <span>info@roseatefarms.com</span>
                 </div>
+                
+                {/* WhatsApp button */}
+                <Button
+                  variant="solid"
+                  size="btn"
+                  className="flex items-center gap-2 mt-2"
+                >
+                  <div className="w-4 h-4 bg-brand-500 rounded-full"></div>
+                  <span>Whatsapp</span>
+                </Button>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              {/* Left Column - Certification and Description */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 border-t border-white border-opacity-20 pt-8">
+              {/* Left Column - Social Media and Description */}
               <div className="md:col-span-1">
-                <div className="my-6">
-                  {/* FSSAI Logo placeholder */}
-                  <div className="w-24 h-16 bg-white rounded mb-4 flex items-center justify-center">
-                    <span className="text-brand-500 text-xs font-bold">FSSAI</span>
-                  </div>
-                  <p className="text-white text-small">LIC NO: 13325008000620</p>
-                </div>
-
                 {/* Social Media */}
-                <div className="my-6">
+                <div className="mb-6">
                   <h4 className="text-white font-semibold mb-3 text-body uppercase tracking-wide">FOLLOW US</h4>
                   <div className="flex gap-3">
                     <div className="w-8 h-8 bg-white rounded-full hover:bg-brand-300 transition-colors cursor-pointer"></div>
@@ -136,7 +119,7 @@ const Footer = () => {
               </div>
 
               {/* More Info Column */}
-              <div className='my-3'>
+              <div>
                 <h4 className="text-white font-semibold mb-4 text-body uppercase tracking-wide">MORE INFO</h4>
                 <ul className="space-y-3">
                   <li><a href="#" className="text-white text-small hover:text-brand-300 transition-colors">Privacy Policy</a></li>
@@ -148,7 +131,7 @@ const Footer = () => {
               </div>
 
               {/* Quick Links Column */}
-              <div className='my-3'>
+              <div>
                 <h4 className="text-white font-semibold mb-4 text-body uppercase tracking-wide">QUICK LINKS</h4>
                 <ul className="space-y-3">
                   <li><a href="#" className="text-white text-small hover:text-brand-300 transition-colors">Home</a></li>
@@ -161,32 +144,18 @@ const Footer = () => {
 
               {/* Logo Column */}
               <div className="flex flex-col items-center md:items-end">
-                {/* Roseate Farms Logo placeholder */}
-                <div className="w-32 h-32 bg-white rounded mb-6 flex items-center justify-center">
-                  <span className="text-brand-500 font-knewave text-xl">ROSEATE<br />FARMS</span>
+                {/* Roseate Farms Logo */}
+                <div className="rounded mb-6 flex items-center justify-center">
+                  <img src="/roseateW.svg" alt="" />
                 </div>
-
-                {/* WhatsApp button */}
-                <Button
-                  variant="solid"
-                  size="btn"
-                  className="flex items-center gap-2"
-                >
-                  <div className="w-4 h-4 bg-brand-500 rounded-full"></div>
-                  <span>Whatsapp</span>
-                </Button>
               </div>
             </div>
 
-
-            <div className="content text-center">
+            <div className="content text-center mt-8 pt-6 border-t border-white border-opacity-20">
               <p className="text-white text-small">© 2025 Roseate farms . All Rights Reserved.</p>
             </div>
           </div>
         </div>
-
-
-
       </div>
     </footer>
   )
