@@ -4,7 +4,7 @@ import { BrandHeading } from '../../../components/BrandHeading'
 function MadeByPeople() {
   return (
     <div>
-        <div className="text-center mt-10 mb-10">
+        <div className="text-center mt-40 mb-10">
         <BrandHeading accentWord="(MEET THE ROSEATE TEAM)">
           MADE BY PEOPLE
         </BrandHeading>

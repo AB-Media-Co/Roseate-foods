@@ -4,6 +4,8 @@ import AboutConTent from "./Components/AboutContent";
 import { BrandHeading } from "../../components/BrandHeading";
 import MadeByPeople from "./Components/MadeByPeople";
 import Banner from "./Components/Banner";
+import Seed from "./Components/Seed";
+import OurKitchen from "./Components/OurKitchen";
 
 const OurStory = () => {
   return (
@@ -11,7 +13,9 @@ const OurStory = () => {
       <Banner />
       <AboutConTent />
       <OurstoryFarms />
-      <MadeByPeople />     
+      <Seed/>
+      <MadeByPeople />    
+      <OurKitchen/>
     </div>
   );
 };
