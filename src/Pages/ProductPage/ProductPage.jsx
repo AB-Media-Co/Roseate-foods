@@ -4,6 +4,7 @@ import FAQ from "../../components/FAQ"
 import YouMayAlsoLike from "./Components/YouMayAlsoLike"
 import Breadcrumb from "../../components/Breadcrumb"
 import ProductDetailPage from "./Components/ProductDetailPage"
+import ProductReviews from "../../components/ProductReviews"
 
 const ProductPage = () => {
   const benefits = [
@@ -41,6 +42,7 @@ const ProductPage = () => {
       <SaleCountdown />
       <FAQ />
       <ProductBenefits benefits={benefits} />
+      <ProductReviews/>
     </div>
   )
 }

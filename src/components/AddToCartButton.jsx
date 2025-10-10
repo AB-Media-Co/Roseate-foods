@@ -20,9 +20,9 @@ const AddToCartButton = ({
   productTitle,
   ...buttonProps
 }) => {
-  console.log(variantId,quantity)
+  // console.log(variantId,quantity)
   const [isAdding, setIsAdding] = useState(false);
-  console.log(isAdding)
+  // console.log(isAdding)
   const { addToCart } = useCart();
 
   const handleAddToCart = async () => {
