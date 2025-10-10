@@ -230,6 +230,7 @@ const Nav = () => {
 
   const { products, productsLoading } = useStorefront();
   const { totalQuantity } = useCart();
+  console.log(totalQuantity)
 
   const productList = useMemo(() => products ?? [], [products]);
 

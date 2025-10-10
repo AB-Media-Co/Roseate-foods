@@ -42,7 +42,7 @@ const ProductPage = () => {
       <SaleCountdown />
       <FAQ />
       <ProductBenefits benefits={benefits} />
-      <ProductReviews/>
+      {/* <ProductReviews/> */}
     </div>
   )
 }

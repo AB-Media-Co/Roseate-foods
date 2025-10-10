@@ -67,6 +67,18 @@ fragment ProductCardFields on Product {
 
   seo { title description }
 
+  # 4) Variants (needed for Add to Cart)
+  variants(first: 20) {
+    edges {
+      node {
+        id
+        title
+        availableForSale
+        price { amount currencyCode }
+      }
+    }
+  }
+
   # Metafields (as you had)
   fssai: metafield(namespace:"legal", key:"fssai_number") { value }
   ingredients: metafield(namespace:"info", key:"ingredients") { value }

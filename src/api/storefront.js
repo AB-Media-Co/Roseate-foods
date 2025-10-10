@@ -54,6 +54,7 @@ export async function apiCartLinesUpdate(cartId, lines) {
 
 export async function apiGetCartById(id) {
   const data = await shopify.request(GET_CART_BY_ID, { id });
+  console.log(data,"gagag")
   return data.cart;
 }
 
