@@ -11,6 +11,7 @@ import OurStory from "./Pages/OurStory/OurStory";
 import ProductPage from "./Pages/ProductPage/ProductPage";
 import Footer from "./components/Footer";
 import Collection from "./Pages/Collections/Collection";
+import Contact from "./Pages/Contact/Contact";
 import Cart from "./Pages/Cart/Cart";
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
             <Route path="/our-story" element={<OurStory />} />
             <Route path="/collection/:handle" element={<Collection />} />
             <Route path="/collection/product/:handle" element={<ProductPage />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/cart" element={<Cart />} />
           </Routes>
           <Footer/>
