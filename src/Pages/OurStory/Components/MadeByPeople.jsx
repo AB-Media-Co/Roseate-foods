@@ -4,15 +4,15 @@ import { BrandHeading } from '../../../components/BrandHeading'
 function MadeByPeople() {
   return (
     <div>
-        <div className="text-center mt-40 mb-10">
-        <BrandHeading accentWord="(MEET THE ROSEATE TEAM)">
-          MADE BY PEOPLE
+        <div className="text-center lg:mt-40 mb-10">
+        <BrandHeading accentWord="(MEET THE ROSEATE TEAM)" className="text-4xl  text-brand-500 mb-10"  >
+          MADE BY PEOPLE <br></br>
         </BrandHeading>
-        <div className="flex justify-between items-center w-full content mt-24">
-          <div className="w-[45%]">
+        <div className="flex flex-col w-full content lg:flex-row justify-between items-center lg:mt-20">
+          <div className="w-full mb-10 lg:w-[47%]">
             <img src="./Home\Assets\people.svg" alt="" />
           </div>
-          <div className="w-[48%] text-[20px] text-left">
+          <div className="w-full text-[18px] text-left lg:text-xl lg:w-[45%]">
             <p>
               We fundamentally believe that food simply tastes better when the
               people making it genuinely care. This isn't just a business

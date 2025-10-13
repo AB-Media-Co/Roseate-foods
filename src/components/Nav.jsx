@@ -379,6 +379,12 @@ const Nav = () => {
                 >
                   OUR STORY
                 </a>
+                <a
+                  href="/contact"
+                  className="text-brand-500 font-medium text-body hover:text-brand-600 transition-colors"
+                >
+                  CONTACT
+                </a>
               </div>
 
               {/* Right - Icons + search */}

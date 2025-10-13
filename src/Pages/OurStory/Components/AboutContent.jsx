@@ -4,7 +4,7 @@ import { BrandHeading } from "../../../components/BrandHeading";
 function AboutContent() {
   return (
     <div className="">
-      <div className="content h-full py-10 flex justify-center items-center text-[20px]">
+      <div className="content h-full py-10 flex justify-center items-center text-[16px] lg:text-xl">
         <p className="p-2">
           At Roseate Farms, we are passionate about delivering the finest dry
           fruits, spices, and pickles that celebrate nature’s bounty. From the
@@ -25,7 +25,7 @@ function AboutContent() {
       <div className="text-center mt-10">
         <BrandHeading accentWord="STORY" className="text-4xl  text-brand-500 mb-6">OUR</BrandHeading>
         <div className="flex justify-center items-center w-full content flex-col-reverse lg:flex-row md:flex-col-reverse">
-          <div className="w-full text-[20px] text-left">
+          <div className="w-full text-[18px] text-left lg:text-xl">
             <p className="p-2">
               Roseate Farms began with a simple belief: that the best flavours
               come from nature, nurtured with care. What started as a small
