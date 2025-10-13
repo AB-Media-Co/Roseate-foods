@@ -7,8 +7,6 @@ const Cart = () => {
 
   const lines = useMemo(() => cart?.lines?.edges?.map((e) => e.node) ?? [], [cart]);
 
-  // const currency = cart?.cost?.totalAmount?.currencyCode || cart?.cost?.subtotalAmount?.currencyCode || "INR";
-
   const computedSubtotal = useMemo(() => {
     return lines.reduce((sum, l) => {
       const p = Number(l?.merchandise?.price?.amount) || 0;
@@ -49,7 +47,7 @@ const Cart = () => {
               const lineTotal = Number(price) * Number(qty || 0);
               return (
                 <div key={l.id} className="bg-white border border-gray-200 rounded-2xl p-4 flex gap-3 sm:gap-4 shadow-sm">
-                  <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl border overflow-hidden flex-shrink-0 bg-gray-50">
+                  <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl  overflow-hidden flex-shrink-0 bg-gray-50">
                     {img ? (
                       <img src={img} alt={title} className="w-full h-full object-cover" />
                     ) : null}

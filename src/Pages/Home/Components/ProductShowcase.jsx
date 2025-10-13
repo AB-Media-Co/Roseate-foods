@@ -95,7 +95,7 @@ const ProductShowcase = () => {
             <img
               src={image}
               alt={product.title || "California Almonds"}
-              className="w-full  object-cover"
+              className="w-full  object-cover h-auto"
             />
           ) : (
             <div className="w-full h-48 bg-gray-100 flex items-center justify-center">

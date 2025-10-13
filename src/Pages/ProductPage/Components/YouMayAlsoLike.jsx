@@ -4,6 +4,7 @@ import UniversalCarousel from "../../../components/UniversalCarousel";
 import { BrandHeading } from "../../../components/BrandHeading";
 import AddToCartButton from "../../../components/AddToCartButton";
 import { getDiscountLabel, getDiscountPercent, isComboProduct } from "../../../utils/price";
+import { useNavigate } from "react-router-dom";
 
 /* ---------- helpers ---------- */
 const SIZE_REGEX = /\b(\d+(?:\.\d+)?)\s?(g|kg|ml|l)\b/i;
@@ -63,6 +64,7 @@ function ProductCard({ variants }) {
   const ratingCount = Number(p.productRatingCount?.value || 0) || null;
 
 
+  const navigate = useNavigate();
 
   const discountPct = getDiscountPercent(price?.amount, compareMax?.amount, {
     round: 'round',   // 'floor' | 'ceil' | 'round'
@@ -77,6 +79,10 @@ function ProductCard({ variants }) {
   const firstAvailable = variantEdges.find(e => e?.node?.availableForSale)?.node?.id;
   const variantId = firstAvailable || variantEdges?.[0]?.node?.id || p?.variants?.[0]?.id || null;
 
+  const handleRedirect = (prod) => {
+    const h = prod?.handle || (prod?.title ? encodeURIComponent(prod.title) : '');
+    window.location.href = `/collection/product/${h}`;
+  };
 
   return (
     <div className="rounded-2xl border border-[color:var(--color-brand-50)] shadow-sm p-4 flex flex-col gap-3 bg-white">
@@ -101,7 +107,9 @@ function ProductCard({ variants }) {
         From <span className="font-semibold text-[color:var(--color-brand-600)]">{inr(price?.amount)}</span>
       </div>
 
-      <div className="text-body font-semibold text-[color:var(--color-brand-600)] leading-snug">
+      <div
+        onClick={() => handleRedirect(p)}
+        className="text-body font-semibold text-[color:var(--color-brand-600)] leading-snug hover:underline cursor-pointer">
         {baseTitle}
       </div>
 
@@ -167,7 +175,7 @@ export default function YouMayAlsoLike() {
   const { products, productsLoading } = useStorefront();
 
   const cards = useMemo(() => {
-  const list = (products || []).filter((p) => !isComboProduct(p));
+    const list = (products || []).filter((p) => !isComboProduct(p));
 
     // group by base title (strip size tokens)
     const groups = {};

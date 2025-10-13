@@ -262,7 +262,7 @@ const ProductDetailPage = () => {
             {/* Quantity controls styled as circular buttons */}
             <div className="flex items-center gap-4">
               <button
-                className="w-14 h-14 rounded-full border border-gray-300 flex items-center justify-center text-2xl leading-none"
+                className="w-14 h-14 cursor-pointer rounded-full border border-gray-300 flex items-center justify-center text-2xl leading-none"
                 onClick={() => setQty((q) => Math.max(1, q - 1))}
                 aria-label="Decrease quantity"
               >
@@ -270,23 +270,13 @@ const ProductDetailPage = () => {
               </button>
               <span className="text-xl font-medium select-none min-w-[16px] text-center">{qty}</span>
               <button
-                className="w-14 h-14 rounded-full border border-gray-300 flex items-center justify-center text-2xl leading-none"
+                className="w-14 h-14 cursor-pointer rounded-full border border-gray-300 flex items-center justify-center text-2xl leading-none"
                 onClick={() => setQty((q) => q + 1)}
                 aria-label="Increase quantity"
               >
                 +
               </button>
-              {/* Wishlist heart */}
-              <button
-                className="w-14 h-14 rounded-full flex items-center justify-center text-white"
-                style={{ backgroundColor: 'var(--color-brand-600)' }}
-                aria-label="Add to wishlist"
-              >
-                {/* Heart icon */}
-                <svg width="22" height="20" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 21s-7.053-4.19-9.6-8.127C.533 10.27 1.02 6.97 3.6 5.207 6.18 3.445 9 4.55 12 7.5c3-2.95 5.82-4.055 8.4-2.293 2.58 1.763 3.067 5.063 1.2 7.666C19.053 16.81 12 21 12 21z" stroke="white" strokeWidth="1.8" fill="none"/>
-                </svg>
-              </button>
+              
             </div>
 
             {/* Action buttons */}

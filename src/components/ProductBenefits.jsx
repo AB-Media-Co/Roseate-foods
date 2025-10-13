@@ -6,11 +6,11 @@ const ProductBenefits = ({benefits}) => {
   return (
     <section className="py-8 bg-white ">
       <div className="content">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {benefits.map((benefit, index) => (
             <div 
               key={benefit.id}
-              className={`flex items-center gap-4 p-4 ${
+              className={`flex md:items-center flex-col md:flex-row gap-4 p-4 ${
                 index < benefits.length - 1 ? 'lg:border-r lg:border-gray-200' : ''
               }`}
             >

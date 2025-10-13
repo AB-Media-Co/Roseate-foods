@@ -159,9 +159,9 @@ export default function ProductReviewsCustom({ shopifyProductGid, productName })
         </div>
 
         {/* Summary */}
-        <div className="px-4 md:px-8 py-4 md:py-6 border-t border-gray-100">
+        <div className=" py-4 md:py-6 border-t border-gray-100">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-            <div className="flex flex-col items-center text-center">
+            <div className="flex flex-col items-start text-center">
               <Stars value={averageRating} size="large" />
               <div className="text-sm md:text-body font-semibold text-gray-800 mt-1">
                 {averageRating.toFixed(2)} Out Of 5
@@ -214,7 +214,7 @@ export default function ProductReviewsCustom({ shopifyProductGid, productName })
         </div>
 
         {/* Filter */}
-        <div className="px-4 md:px-8 py-3 md:py-4 border-t border-gray-100">
+        <div className=" py-3 md:py-4 border-t border-gray-100">
           <div className="flex justify-start">
             <select
               value={sort}
@@ -229,7 +229,7 @@ export default function ProductReviewsCustom({ shopifyProductGid, productName })
         </div>
 
         {/* Reviews */}
-        <div className="px-4 md:px-8 py-4 md:py-6">
+        <div className=" py-4 md:py-6">
           <div className="space-y-4 md:space-y-6">
             {visibleReviews.map((r) => (
               <div key={r.id} className="border-b border-gray-100 pb-3 md:pb-4 last:border-b-0">
