@@ -22,6 +22,10 @@
   --font-knewave: "Knewave", system-ui;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* -------------------------------------- */
 /* Typography utilities                   */
 /* -------------------------------------- */

@@ -9,7 +9,7 @@ import { getDiscountLabel, getDiscountPercent, isNewProduct } from '../../../uti
 
 const ProductShowcase = () => {
   const { products, productsLoading } = useStorefront();
-  console.log("Products in ProductShowcase:", products);
+  // console.log("Products in ProductShowcase:", products);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
@@ -52,10 +52,10 @@ const ProductShowcase = () => {
     const variantEdges = product?.variants?.edges || [];
     const firstAvailable = variantEdges.find(e => e?.node?.availableForSale)?.node?.id;
     const variantId = firstAvailable || variantEdges?.[0]?.node?.id || product?.variants?.[0]?.id || null;
-    console.log("Product in ProductCard:", product);
+    // console.log("Product in ProductCard:", product);
     const newItem = isNewProduct(product);
 
-    console.log("Is New Item:", price, comparePrice);
+    // console.log("Is New Item:", price, comparePrice);
     const discountPct = getDiscountPercent(price, comparePrice, {
       round: 'round',   // 'floor' | 'ceil' | 'round'
       minPct: 1,        // <1% not shown
