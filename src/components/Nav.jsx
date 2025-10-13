@@ -262,14 +262,14 @@ const Nav = () => {
               <Search className="h-6 w-6" />
             </button>
 
-            <button aria-label="Cart" className="relative p-1">
+            <a href="/cart" aria-label="Cart" className="relative p-1">
               <img src="/cartM.svg" alt="Cart" className="h-6 w-6" />
               {totalQuantity > 0 && (
                 <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] flex items-center justify-center font-medium">
                   {totalQuantity}
                 </span>
               )}
-            </button>
+            </a>
           </div>
         </nav>
 
@@ -415,18 +415,14 @@ const Nav = () => {
                   <User className="text-brand-500" />
                 </Button>
 
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="relative text-brand-500 hover:text-brand-600 hover:bg-transparent"
-                >
+                <a href="/cart" className="relative inline-grid place-items-center w-10 h-10 text-brand-500 hover:text-brand-600">
                   <img src="/cart.svg" alt="Cart" />
                   {totalQuantity > 0 && (
                     <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-xs flex items-center justify-center font-medium">
                       {totalQuantity}
                     </span>
                   )}
-                </Button>
+                </a>
               </div>
             </div>
           </div>

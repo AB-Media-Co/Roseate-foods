@@ -5,6 +5,9 @@ import YouMayAlsoLike from "./Components/YouMayAlsoLike"
 import Breadcrumb from "../../components/Breadcrumb"
 import ProductDetailPage from "./Components/ProductDetailPage"
 import ProductReviews from "../../components/ProductReviews"
+import { useStorefront } from "../../context/StorefrontContext"
+import { useMemo } from "react"
+import { useParams } from "react-router-dom"
 
 const ProductPage = () => {
   const benefits = [
@@ -34,6 +37,29 @@ const ProductPage = () => {
     }
   ]
 
+  const { products } = useStorefront()
+  const { handle } = useParams()
+
+  const safeDecode = (str = "") => {
+    try {
+      return decodeURIComponent(str);
+    } catch {
+      return str; // fallback: return raw if decode fails
+    }
+  };
+
+  // find current product (by handle; fallback by title)
+  const current = useMemo(() => {
+    if (!products?.length) return null
+    const byHandle = products.find((p) => p.handle === handle)
+    if (byHandle) return byHandle
+    // fallback: URL may have title instead of handle
+    const decoded = safeDecode(handle || '')
+    return products.find((p) => p.title === decoded) || null
+  }, [products, handle])
+
+  // console.log(current,"hahhahahahahh  ")
+
   return (
     <div className="my-10">
       <Breadcrumb />
@@ -42,7 +68,7 @@ const ProductPage = () => {
       <SaleCountdown />
       <FAQ />
       <ProductBenefits benefits={benefits} />
-      {/* <ProductReviews/> */}
+      <ProductReviews shopifyProductGid={current?.id} />
     </div>
   )
 }

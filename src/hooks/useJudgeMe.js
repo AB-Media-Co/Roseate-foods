@@ -6,6 +6,7 @@ import {
   createReview,
   sendManualReviewRequest,
   getProductReviewWidget,
+  getProductReviewWidgetByExternalId,
 } from "../api/judgemeClient";
 
 export function useJudgeMeProductIdByExternalId(externalId) {
@@ -41,6 +42,19 @@ export function useJudgeMePublicWidget(productId) {
     enabled: !!productId,
     queryKey: ["judgeme", "widget", productId],
     queryFn: () => getProductReviewWidget(productId),
+    retry: false,
+    refetchOnWindowFocus: false,
+    staleTime: 10 * 60 * 1000,
+  });
+}
+
+export function useJudgeMePublicWidgetByExternalId(externalId) {
+  return useQuery({
+    enabled: !!externalId,
+    queryKey: ["judgeme", "widgetByExternalId", externalId],
+    queryFn: () => getProductReviewWidgetByExternalId(externalId),
+    retry: false,
+    refetchOnWindowFocus: false,
     staleTime: 10 * 60 * 1000,
   });
 }
