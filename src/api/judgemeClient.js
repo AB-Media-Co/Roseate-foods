@@ -33,9 +33,22 @@ export async function listReviews({ productId, page = 1, perPage = 20 }) {
 }
 
 // PRIVATE: create a review
-export async function createReview({ product_id, rating, title, body }) {
+export async function createReview({ product_id, rating, title, body, reviewer_name, reviewer_email }) {
     const url = `${BASE_PRIVATE}/reviews`;
-    const bodyJson = JSON.stringify({ shop_domain: SHOP_DOMAIN, api_token: PRIVATE_TOKEN, product_id, rating, title, body });
+    const requestData = { 
+        shop_domain: SHOP_DOMAIN, 
+        api_token: PRIVATE_TOKEN, 
+        product_id, 
+        rating, 
+        title, 
+        body,
+        reviewer_name,
+        reviewer_email,
+        email: reviewer_email  // Some APIs expect both field names
+    };
+    
+    console.log('Judge.me API request data:', requestData);
+    const bodyJson = JSON.stringify(requestData);
     return fetchJson(url, { method: "POST", body: bodyJson });
 }
 

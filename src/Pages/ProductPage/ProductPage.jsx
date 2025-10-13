@@ -64,11 +64,15 @@ const ProductPage = () => {
     <div className="my-10">
       <Breadcrumb />
       <ProductDetailPage />
+      <ProductReviews shopifyProductGid={current?.id}
+        onData={(data) => {
+          console.log("JDGM parsed data:", data);
+        }}
+        debug={true} />
       <YouMayAlsoLike />
       <SaleCountdown />
       <FAQ />
       <ProductBenefits benefits={benefits} />
-      <ProductReviews shopifyProductGid={current?.id} />
     </div>
   )
 }
