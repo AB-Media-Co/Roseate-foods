@@ -109,7 +109,7 @@ const Cart = () => {
               <h2 className="text-body font-semibold text-brand-600 mb-4">Order Summary</h2>
 
               {/* Promo code */}
-              <div className="mb-4">
+              {/* <div className="mb-4">
                 <label className="block text-small text-gray-600 mb-1">Promo Code</label>
                 <div className="flex flex-col lg:flex-row gap-2">
                   <input
@@ -119,7 +119,7 @@ const Cart = () => {
                   />
                   <Button variant="outlinebrand" size="btn" className="whitespace-nowrap border border-[var(--color-brand-500)] text-[var(--color-brand-600)] hover:bg-[var(--color-brand-50)]">Apply</Button>
                 </div>
-              </div>
+              </div> */}
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-body">
