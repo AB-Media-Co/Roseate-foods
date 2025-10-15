@@ -7,16 +7,7 @@ export const toNumber = (v) => {
   return Number.isFinite(n) ? n : null;
 };
 
-/**
- * getDiscountPercent(price, compareAt, options?)
- * - price: selling price
- * - compareAt: original/MRP
- * options:
- *   - round: 'round' | 'floor' | 'ceil' (default: 'round')
- *   - minPct: minimum % to show, else null (default: 1)
- *   - maxPct: clamp upper bound (default: 95)
- *   - step: round to nearest step (e.g. 5 => 33 -> 35) (default: null)
- */
+
 export const getDiscountPercent = (price, compareAt, options = {}) => {
   const roundMode = options.round || 'round';
   const minPct = options.minPct ?? 1;

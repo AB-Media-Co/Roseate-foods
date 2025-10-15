@@ -6,9 +6,10 @@ import ProductReviews from '../../../components/ProductReviews'
 import Button from '../../../components/ui/Button'
 import { getDiscountLabel, getDiscountPercent } from '../../../utils/price'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { FreeMode, Autoplay } from 'swiper/modules'
+import { FreeMode } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/free-mode'
+import { useCart } from '../../../state/CartProvider'
 
 // helpers
 const SIZE_REGEX = /(\d+(?:\.\d+)?)\s*(g|kg|ml|l)\b/i
@@ -38,6 +39,8 @@ const ProductDetailPage = () => {
   const { products } = useStorefront()
   // console.log(products)
   const [qty, setQty] = useState(1)
+
+  const { checkoutUrl } = useCart();
 
   const safeDecode = (str = "") => {
     try {
@@ -85,8 +88,7 @@ const ProductDetailPage = () => {
     return group.variants[selIdx ?? (idx >= 0 ? idx : 0)] || current
   }, [group, selIdx, current])
 
-
-  console.log(sel?.id, ",@alala")
+  console.log(sel, ",@alala")
 
   // pricing
   const price = sel?.priceRange?.minVariantPrice?.amount ?? sel?.variants?.[0]?.price ?? sel?.price ?? null
@@ -156,6 +158,9 @@ const ProductDetailPage = () => {
   }
 
 
+
+
+
   return (
     <>
       <section className="content grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -163,9 +168,8 @@ const ProductDetailPage = () => {
         <div>
           <div className="relative bg-white  rounded-2xl p-3">
             <Swiper
-              modules={[FreeMode, Autoplay]}
+              modules={[FreeMode]}
               loop={true}
-              autoplay={{ delay: 2500, disableOnInteraction: false }}
               onSwiper={setMainSwiper}
               onSlideChange={(s) => setActiveIdx(s.realIndex ?? s.activeIndex)}
               className="rounded-xl overflow-hidden"
@@ -183,7 +187,7 @@ const ProductDetailPage = () => {
             </Swiper>
             <button
               title="Zoom"
-              className="absolute right-4 top-4 p-2 rounded-full bg-white/80 hover:bg-white shadow"
+              className="absolute z-50 right-4 top-4 p-2 rounded-full bg-white/80 hover:bg-white shadow"
               onClick={() => { setLightboxIdx(activeIdx); setIsLightboxOpen(true) }}
             >
               <img src="/glass.svg" alt="zoom" className="w-5 h-5" />
@@ -191,6 +195,31 @@ const ProductDetailPage = () => {
             {discountPct ? (
               <span className="absolute left-4 top-4 text-xs text-white px-2 py-1 rounded" style={{ backgroundColor: 'var(--color-brand-500)' }}>{discountLabel}</span>
             ) : null}
+
+            {images.length > 1 && (
+              <>
+                <button
+                  title="Previous"
+                  aria-label="Previous image"
+                  className="absolute  z-50 left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 hover:bg-white shadow"
+                  onClick={() => mainSwiper?.slidePrev()}
+                >
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M15 18l-6-6 6-6" />
+                  </svg>
+                </button>
+                <button
+                  title="Next"
+                  aria-label="Next image"
+                  className="absolute z-50  right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 hover:bg-white shadow"
+                  onClick={() => mainSwiper?.slideNext()}
+                >
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M9 6l6 6-6 6" />
+                  </svg>
+                </button>
+              </>
+            )}
           </div>
 
           {images.length > 1 && (
@@ -276,7 +305,7 @@ const ProductDetailPage = () => {
               >
                 +
               </button>
-              
+
             </div>
 
             {/* Action buttons */}
@@ -299,12 +328,22 @@ const ProductDetailPage = () => {
                 className="px-8 min-w-[170px] rounded-full text-white"
                 variant="default"
                 style={{ backgroundColor: 'var(--color-brand-600)' }}
-                onSuccess={() => {
-                  // after adding, navigate to cart page if you have one; fallback to checkout url if present later
+                onSuccess={async () => {
+                  // Thoda sa time do taaki context checkoutUrl update ho jaye
+                  setTimeout(() => {
+                    if (checkoutUrl) {
+                      window.location.href = checkoutUrl; // ⬅️ same URL as Cart's "Place Order"
+                    } else {
+                      // fallback — agar abhi update na hua ho
+                      window.location.href = '/checkout';
+                    }
+                  }, 150);
                 }}
               >
                 Buy Now
               </AddToCartButton>
+
+
             </div>
           </div>
 
@@ -397,45 +436,47 @@ const ProductDetailPage = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section >
       {/* Reviews widget */}
-      {isLightboxOpen && (
-        <div
-          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center"
-          onClick={() => setIsLightboxOpen(false)}
-        >
-          {/* Prev */}
-          {images.length > 1 && (
-            <button
-              className="absolute left-3 sm:left-4 md:left-6 top-1/2 -translate-y-1/2 text-white text-2xl sm:text-3xl px-3 py-2 bg-black/40 hover:bg-black/60 rounded-full"
-              onClick={(e) => { e.stopPropagation(); setLightboxIdx((i) => (i - 1 + images.length) % images.length) }}
-            >
-              ‹
-            </button>
-          )}
-          <button
-            className="absolute top-4 right-4 text-white text-xl px-3 py-1 bg-black/40 rounded-full"
+      {
+        isLightboxOpen && (
+          <div
+            className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center"
             onClick={() => setIsLightboxOpen(false)}
           >
-            ×
-          </button>
-          <img
-            src={(images.length ? images : [sel?.featuredImage?.url])[lightboxIdx]}
-            alt="zoomed"
-            className="max-w-[95vw] max-h-[90vh] object-contain"
-            onClick={(e) => e.stopPropagation()}
-          />
-          {/* Next */}
-          {images.length > 1 && (
+            {/* Prev */}
+            {images.length > 1 && (
+              <button
+                className="absolute left-3 sm:left-4 md:left-6 top-1/2 -translate-y-1/2 text-white text-2xl sm:text-3xl px-3 py-2 bg-black/40 hover:bg-black/60 rounded-full"
+                onClick={(e) => { e.stopPropagation(); setLightboxIdx((i) => (i - 1 + images.length) % images.length) }}
+              >
+                ‹
+              </button>
+            )}
             <button
-              className="absolute right-3 sm:right-4 md:right-6 top-1/2 -translate-y-1/2 text-white text-2xl sm:text-3xl px-3 py-2 bg-black/40 hover:bg-black/60 rounded-full"
-              onClick={(e) => { e.stopPropagation(); setLightboxIdx((i) => (i + 1) % images.length) }}
+              className="absolute top-4 right-4 text-white text-xl px-3 py-1 bg-black/40 rounded-full"
+              onClick={() => setIsLightboxOpen(false)}
             >
-              ›
+              ×
             </button>
-          )}
-        </div>
-      )}
+            <img
+              src={(images.length ? images : [sel?.featuredImage?.url])[lightboxIdx]}
+              alt="zoomed"
+              className="max-w-[95vw] max-h-[90vh] object-contain"
+              onClick={(e) => e.stopPropagation()}
+            />
+            {/* Next */}
+            {images.length > 1 && (
+              <button
+                className="absolute right-3 sm:right-4 md:right-6 top-1/2 -translate-y-1/2 text-white text-2xl sm:text-3xl px-3 py-2 bg-black/40 hover:bg-black/60 rounded-full"
+                onClick={(e) => { e.stopPropagation(); setLightboxIdx((i) => (i + 1) % images.length) }}
+              >
+                ›
+              </button>
+            )}
+          </div>
+        )
+      }
     </>
   )
 }

@@ -1,5 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { useStorefront } from "../../../context/StorefrontContext";
+import Loader from "../../../components/ui/Loader";
+import Empty from "../../../components/ui/Empty";
 import UniversalCarousel from "../../../components/UniversalCarousel";
 import { BrandHeading } from "../../../components/BrandHeading";
 import AddToCartButton from "../../../components/AddToCartButton";
@@ -210,12 +212,19 @@ export default function YouMayAlsoLike() {
 
   if (productsLoading) {
     return (
-      <div className="py-8 text-center text-small text-[color:var(--color-brand-600)]">
-        Loading recommendations…
+      <div className="py-8 text-center">
+        <Loader message="Loading recommendations…" />
       </div>
     );
   }
-  if (!cards.length) return null;
+  if (!cards.length) return (
+    <section className="my-8 content">
+      <div className=" text-center mb-4">
+        <BrandHeading accentWord="LIKE">YOU MAY ALSO </BrandHeading>
+      </div>
+      <Empty title="No recommendations" message="We couldn’t find related products right now." />
+    </section>
+  );
 
   return (
     <section className="my-8 content">

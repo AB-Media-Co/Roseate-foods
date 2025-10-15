@@ -6,7 +6,7 @@ export const BrandHeading = ({
     as: Component = "h2"
   }) => {
     return (
-      <Component className={` ${className}`}>
+      <Component className={` ${className} `}>
         {children} <span className={accentClassName}>{accentWord}</span>
       </Component>
     );

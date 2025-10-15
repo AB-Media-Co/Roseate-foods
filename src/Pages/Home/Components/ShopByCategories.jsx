@@ -2,6 +2,8 @@ import React from "react";
 import { BrandHeading } from "../../../components/BrandHeading";
 import { useStorefront } from "../../../context/StorefrontContext";
 import UniversalCarousel from "../../../components/UniversalCarousel";
+import Loader from "../../../components/ui/Loader";
+import Empty from "../../../components/ui/Empty";
 import { useNavigate } from "react-router-dom";
 
 /* === Single round image + label === */
@@ -48,7 +50,7 @@ export default function ShopByCategories() {
   const { collections, collectionsLoading } = useStorefront();
   // console.log(collections)
 
-  if (collectionsLoading) return <div>Loading...</div>;
+  if (collectionsLoading) return <Loader message="Loading categories..." />;
 
 
   // ✅ filter the collections by handle
@@ -73,7 +75,10 @@ export default function ShopByCategories() {
         }
       `}</style>
 
-      <UniversalCarousel
+      {filteredItems.length === 0 ? (
+        <Empty title="No categories" message="No categories available to display." />
+      ) : (
+        <UniversalCarousel
         mode="cards"
         loop
         draggable
@@ -92,11 +97,12 @@ export default function ShopByCategories() {
         slidesPerViewMd={2}
         slidesPerViewLg={4}
         autoplayDelay={0}
-      >
-        {filteredItems.map((p) => (
-          <CategoryCard key={p.id} product={p} />
-        ))}
-      </UniversalCarousel>
+        >
+          {filteredItems.map((p) => (
+            <CategoryCard key={p.id} product={p} />
+          ))}
+        </UniversalCarousel>
+      )}
     </div>
   );
 }

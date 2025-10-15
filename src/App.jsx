@@ -13,6 +13,13 @@ import Footer from "./components/Footer";
 import Collection from "./Pages/Collections/Collection";
 import Contact from "./Pages/Contact/Contact";
 import Cart from "./Pages/Cart/Cart";
+import NotFound from "./Pages/NotFound";
+import PrivacyPolicy from "./Pages/PolicyPages/PrivacyPolicy";
+import RefundPolicy from "./Pages/PolicyPages/RefundPolicy";
+import ShippingPolicy from "./Pages/PolicyPages/ShippingPolicy";
+import TermsOfServices from "./Pages/PolicyPages/TermsOfServices";
+import CustomerSupport from "./Pages/PolicyPages/CustomerSupport";
+import BestSellerPage from "./Pages/BestSeller/BestSellerPage";
 
 function App() {
   return (
@@ -34,6 +41,14 @@ function App() {
             <Route path="/collection/product/:handle" element={<ProductPage />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/best-sellers" element={<BestSellerPage />} />
+            <Route path="/privacy-policies" element={<PrivacyPolicy />} />
+            <Route path="/refund-policy" element={<RefundPolicy />} />
+            <Route path="/shipping-policy" element={<ShippingPolicy />} />
+            <Route path="/terms-of-service" element={<TermsOfServices />} />
+            <Route path="/customer-support" element={<CustomerSupport />} />
+
+            <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer/>
         </CartProvider>

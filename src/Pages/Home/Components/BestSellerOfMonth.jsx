@@ -7,8 +7,9 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 // Example: icon imports – change to your library if needed
-import { Eye, Share2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import Loader from '../../../components/ui/Loader';
+import Empty from '../../../components/ui/Empty';
 
 const BestSellerOfMonth = () => {
   const { data, isLoading, error } = useCollection("best-seller", 8);
@@ -17,7 +18,7 @@ const BestSellerOfMonth = () => {
     <section className="py-12 md:py-16">
       <div className="content">
         <div className="text-center">
-          <div className="text-body text-gray-500">Loading Best Sellers...</div>
+          <Loader message="Loading Best Sellers..." />
         </div>
       </div>
     </section>
@@ -60,19 +61,11 @@ const BestSellerOfMonth = () => {
       <div className="bg-white relative rounded-2xl border border-gray-200 flex flex-col shadow-lg w-[300px] mx-auto overflow-visible transition-transform hover:-translate-y-1 hover:shadow-xl font-sans">
         {/* "Best Seller" Badge */}
         <div className="absolute left-2 top-2 z-10">
-          <span className="bg-[var(--color-brand-500)] text-white px-3 py-1 text-[12px] rounded-full font-semibold text-small">
+          <span className="bg-[var(--color-brand-500)] text-white px-3 py-1  rounded-full font-semibold text-small">
             Best Seller
           </span>
         </div>
-        {/* Action Icons */}
-        <div className="absolute top-2 right-2 z-10 flex flex-col gap-2">
-          <button className="bg-white rounded-full p-2 shadow hover:scale-105">
-            <Share2 className="h-4 w-4 text-[var(--color-brand-500)]" />
-          </button>
-          <button className="bg-white rounded-full p-2 shadow hover:scale-105">
-            <Eye className="h-4 w-4 text-[var(--color-brand-500)]" />
-          </button>
-        </div>
+
         {/* Product Image */}
         <div className="p-8 pb-2">
           {image
@@ -128,7 +121,7 @@ const BestSellerOfMonth = () => {
           <div className="text-center mb-10 md:mb-14">
             <BrandHeading accentWord="SELLERS THIS MONTH">EXPLORE BEST</BrandHeading>
           </div>
-          <div className="text-center text-body text-gray-500">No best seller products found.</div>
+          <Empty title="No best sellers" message="No best seller products found." />
         </div>
       </section>
     );

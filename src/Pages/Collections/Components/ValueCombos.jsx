@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrandHeading } from '../../../components/BrandHeading';
+import Loader from '../../../components/ui/Loader';
+import Empty from '../../../components/ui/Empty';
 import { useProducts } from '../../../hooks/useProducts';
 import AddToCartButton from "../../../components/AddToCartButton";
 import { getDiscountLabel, getDiscountPercent } from '../../../utils/price';
@@ -96,7 +98,7 @@ const ComboCard = ({ product }) => {
                     alt={title}
                     className="w-full h-full object-cover rounded-t-xl"
                 />
-                <div className="absolute top-4 right-0 bg-brand-500 text-white text-xs px-2 py-1  flex items-center gap-1">
+                <div className="absolute top-0 md:top-4 right-0 bg-brand-500 text-white text-xs px-2 py-1  flex items-center gap-1">
                     Combo Offer
                 </div>
 
@@ -112,7 +114,7 @@ const ComboCard = ({ product }) => {
                 <div className="flex  items-baseline gap-2 mb-2">
                     <span className="text-lg text-semibold">MRP:</span>
                     {comparePrice ? (
-                        <span className="text-sm text-gray-400 line-through">
+                        <span className="text-[8px] md:text-sm text-gray-400 line-through">
                             ₹{comparePrice}
                         </span>
                     ) : null}
@@ -154,7 +156,7 @@ const ValueCombos = () => {
     const comboProducts = (allProducts || []).filter(isComboProduct);
 
     if (isAllLoading)
-        return <p className="text-center py-8 text-body">Loading combos...</p>;
+        return <Loader message="Loading combos..." />;
     if (isAllError)
         return (
             <p className="text-center py-8 text-red-600 text-body">
@@ -176,14 +178,14 @@ const ValueCombos = () => {
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-3  gap-6">
                 {comboProducts.length > 0 ? (
                     comboProducts.map((p, idx) => (
                         <ComboCard key={p.id || idx} product={p} />
                     ))
                 ) : (
-                    <div className="col-span-full text-center py-12 text-gray-500 text-body">
-                        No combo products found.
+                    <div className="col-span-full">
+                        <Empty title="No combos" message="No combo products found." />
                     </div>
                 )}
             </div>

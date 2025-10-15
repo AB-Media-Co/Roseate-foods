@@ -3,6 +3,8 @@ import { useCollection, useProducts } from '../../../hooks/useProducts';
 import { useParams } from 'react-router-dom';
 import { BrandHeading } from '../../../components/BrandHeading';
 import { Star, StarHalf, Filter as FilterIcon } from 'lucide-react';
+import Loader from '../../../components/ui/Loader';
+import Empty from '../../../components/ui/Empty';
 import AddToCartButton from '../../../components/AddToCartButton';
 import { getDiscountLabel, getDiscountPercent } from '../../../utils/price';
 
@@ -107,10 +109,10 @@ const groupProductsByBase = (products = []) => {
         const baseKey = deriveBaseKey(title);
         const baseTitle = stripSizeTokens(title);
 
-        const weight =
-            extractWeight(title) ||
-            p?.variants?.edges?.[0]?.node?.weight ||
-            null;
+        // const weight =
+        //     extractWeight(title) ||
+        //     p?.variants?.edges?.[0]?.node?.weight ||
+        //     null;
 
         const createdAt = p?.createdAt ? new Date(p.createdAt).getTime() : null;
         const inStockFlag = Boolean(
@@ -171,8 +173,8 @@ const groupProductsByBase = (products = []) => {
         entry.inStock = Boolean(entry.inStock || inStockFlag);
 
         entry.options.push({
-            label: weight || 'Pack',
-            weight: weight || 'Pack',
+            label: extractWeight(title) || 'Pack',
+            weight: extractWeight(title) || 'Pack',
             price,
             compareAt,
             variantId,
@@ -207,7 +209,6 @@ const ProductCard = ({ product, isAllProductsPage = false }) => {
         comparePrice,
         rating,
         reviewCount,
-        weight,
         variantId
     } = useMemo(() => {
         if (isGrouped) {
@@ -219,7 +220,6 @@ const ProductCard = ({ product, isAllProductsPage = false }) => {
                 comparePrice: opt?.compareAt ?? null,
                 rating: product.rating ?? 0,
                 reviewCount: product.ratingCount ?? 0,
-                weight: opt?.label ?? 'Pack',
                 variantId: opt?.variantId ?? null
             };
         }
@@ -283,7 +283,7 @@ const ProductCard = ({ product, isAllProductsPage = false }) => {
             <div className="p-4">
                 {/* Price */}
                 <div className="mb-2">
-                    <span className="text-gray-600 text-small">From </span>
+                    <span className="text-gray-600 text-small">From </span> <br />
                     <span className="text-lg font-semibold">₹{price}</span>
                     {comparePrice ? (
                         <span className="text-small text-gray-400 line-through ml-2">
@@ -293,7 +293,7 @@ const ProductCard = ({ product, isAllProductsPage = false }) => {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-gray-800 h-[50px] hover:underline cursor-pointer font-medium mb-2 line-clamp-2 text-body"
+                <h3 className="text-gray-800 h-[50px] md:h-[30px] hover:underline cursor-pointer font-medium mb-2 line-clamp-2 text-body"
                     onClick={() => window.location.href = `/collection/product/${product.handle}`}
                 >
                     {displayTitle}
@@ -542,12 +542,12 @@ const ShowProductsSection = () => {
     if (!handle) return <p className="text-center py-8 text-body">No collection handle provided.</p>;
 
     if (isAllProductsPage) {
-        if (isAllLoading) return <p className="text-center py-8 text-body">Loading all products...</p>;
+        if (isAllLoading) return <Loader message="Loading all products..." />;
         if (isAllError) return <p className="text-center py-8 text-red-600 text-body">Failed to load all products.</p>;
     } else {
-        if (isCollectionLoading) return <p className="text-center py-8 text-body">Loading collection...</p>;
+        if (isCollectionLoading) return <Loader message="Loading collection..." />;
         if (isCollectionError) return <p className="text-center py-8 text-red-600 text-body">Failed to load collection.</p>;
-        if (!collectionData?.pages?.length) return <p className="text-center py-8 text-body">Collection not found.</p>;
+        if (!collectionData?.pages?.length) return <Empty title="No collection" message="Collection not found." />;
     }
 
     return (
@@ -813,7 +813,7 @@ const ShowProductsSection = () => {
             </div>
 
             {/* Products Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {sortedList?.length > 0 ? (
                     sortedList.map((p, idx) => (
                         <ProductCard

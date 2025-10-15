@@ -23,7 +23,7 @@ function AboutContent() {
         </p>
       </div>
       <div className="text-center mt-10">
-        <BrandHeading accentWord="STORY" className="text-4xl  text-brand-500 mb-6">OUR</BrandHeading>
+        <BrandHeading accentWord="STORY" >OUR</BrandHeading>
         <div className="flex justify-center items-center w-full content flex-col-reverse lg:flex-row md:flex-col-reverse">
           <div className="w-full text-[18px] text-left lg:text-xl">
             <p className="p-2">

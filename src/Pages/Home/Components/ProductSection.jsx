@@ -6,6 +6,8 @@ import bg1 from "/Home/products/bg1.png";
 import bg2 from "/Home/products/bg2.png";
 import bg3 from "/Home/products/bg3.png";
 import Button from "../../../components/ui/Button";
+import Empty from "../../../components/ui/Empty";
+import Loader from "../../../components/ui/Loader";
 
 const ProductCard = ({ collection, bg, height = "500px" }) => (
   <div
@@ -31,7 +33,7 @@ const ProductCard = ({ collection, bg, height = "500px" }) => (
         variant="outline"
         size="btn"
         className="text-brand-500 hover:text-brand-600 hover:bg-transparent"
-        onClick={() => (window.location.href = `/collections/${collection.handle}`)}
+        onClick={() => (window.location.href = `/collection/${collection.handle}`)}
       >
         Explore Now
       </Button>
@@ -46,8 +48,15 @@ const ProductSection = () => {
   const bgs = useMemo(() => [bg1, bg2, bg3], []);
   const bgAt = (i) => bgs[i % bgs.length];
 
-  if (collectionsLoading) return <div>Loading...</div>;
-  if (!collections?.items?.length) return null;
+  if (collectionsLoading) return <Loader message="Loading collections..." />;
+  if (!collections?.items?.length) return (
+    <div className="my-10 content">
+      <div className="text-center mb-10 md:mb-14">
+        <BrandHeading accentWord="PRODUCTS">Meet our ROSEATE</BrandHeading>
+      </div>
+      <Empty title="No collections" message="No collections available right now." />
+    </div>
+  );
 
   // filter by handle
   const allowedHandles = ["dry-fruits", "pickles", "spices"];
@@ -55,7 +64,14 @@ const ProductSection = () => {
     allowedHandles.includes(c.handle?.toLowerCase())
   );
 
-  if (!filtered.length) return null;
+  if (!filtered.length) return (
+    <div className="my-10 content">
+      <div className="text-center mb-10 md:mb-14">
+        <BrandHeading accentWord="PRODUCTS">Meet our ROSEATE</BrandHeading>
+      </div>
+      <Empty title="No collections" message="No matching collections to show." />
+    </div>
+  );
 
   // show first 3 until expanded
   const visibleItems = showAll ? filtered : filtered.slice(0, 3);

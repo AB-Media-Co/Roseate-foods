@@ -5,7 +5,7 @@ function MadeByPeople() {
   return (
     <div>
         <div className="text-center lg:mt-40 mb-10">
-        <BrandHeading accentWord="(MEET THE ROSEATE TEAM)" className="text-4xl  text-brand-500 mb-10"  >
+        <BrandHeading accentWord="(MEET THE ROSEATE TEAM)" >
           MADE BY PEOPLE <br></br>
         </BrandHeading>
         <div className="flex flex-col w-full content lg:flex-row justify-between items-center lg:mt-20">

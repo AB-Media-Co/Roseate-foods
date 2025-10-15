@@ -74,14 +74,11 @@ const FuelYourDay = ({ slides }) => {
       benefits: defaultBenefits,
     },
     {
-      titleLine: 'FUEL YOUR DAY WITH',
-      brandHeadingMain: "NATURE'S",
-      brandHeadingAccent: 'PERFECT BENEFIT',
-      primaryCta: { label: 'Learn more', href: '#' },
-      secondaryCta: { label: 'Buy Almonds', href: '#' },
-      image: { src: '/Home/fueldayImage.png', alt: 'Roseate Farms Premium Almonds Package' },
-      benefits: defaultBenefits,
-    },
+      image: {
+        src: '/perfectBenifit.png',
+        alt: 'Almond Benefits Banner'
+      }
+    }
   ];
 
   const slidesData = Array.isArray(slides) && slides.length ? slides : defaultSlides;
@@ -104,118 +101,133 @@ const FuelYourDay = ({ slides }) => {
         >
           {slidesData.map((slide, idx) => (
             <div key={idx} className="">
-              {/* Header */}
-              <div className="text-center mb-12 md:mb-16">
-                <h2 className="text-heading text-white mb-2">
-                  {slide.titleLine}
-                </h2>
-                <BrandHeading
-                  className="text-heading text-white mb-8 md:mb-10"
-                  accentWord={slide.brandHeadingAccent}
-                  accentClassName="font-knewave text-white"
-                >
-                  {slide.brandHeadingMain}
-                </BrandHeading>
-
-                {/* Buttons */}
-                <div className="flex flex-row gap-4 justify-center items-center">
-                  {slide.primaryCta ? (
-                    <a href={slide.primaryCta.href || '#'}>
-                      <Button
-                        variant="outline"
-                        size="btn"
-                        className=" px-8 py-2 rounded-full"
-                      >
-                        {slide.primaryCta.label || 'Learn more'}
-                      </Button>
-                    </a>
-                  ) : null}
-                  {slide.secondaryCta ? (
-                    <a href={slide.secondaryCta.href || '#'}>
-                      <Button
-                        variant="solid"
-                        size="btn"
-                        className=" px-8 py-2 rounded-full text-brand-500 font-semibold"
-                      >
-                        {slide.secondaryCta.label || 'Buy Now'}
-                      </Button>
-                    </a>
-                  ) : null}
+              {!slide.titleLine && !slide.benefits ? (
+                <div className="flex justify-center items-center">
+                  <img
+                    src={slide.image?.src}
+                    alt={slide.image?.alt || ''}
+                    className="w-full l mx-auto"
+                    loading="lazy"
+                  />
                 </div>
-              </div>
+              ) : (
 
-              {/* Content Grid */}
-              <div className="grid lg:grid-cols-2 gap-8  items-stretch">
-                {/* Product Image */}
-                <div className="order-1 lg:order-1 flex items-center">
-                  {slide.image ? (
-                    <img
-                      src={slide.image.src}
-                      alt={slide.image.alt || ''}
-                      className="w-full max-w-md lg:max-w-lg mx-auto"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  ) : null}
-                </div>
+                <>
+                  {/* Header */}
+                  <div className="text-center mb-12 md:mb-16">
+                    <h2 className="text-heading text-white mb-2">
+                      {slide.titleLine}
+                    </h2>
+                    <BrandHeading
+                      className="text-heading text-white mb-8 md:mb-10"
+                      accentWord={slide.brandHeadingAccent}
+                      accentClassName="font-knewave text-white"
+                    >
+                      {slide.brandHeadingMain}
+                    </BrandHeading>
 
-                {/* Benefits Grid */}
-                <div className="order-1 lg:order-2 flex items-center">
-                  {/* Mobile */}
-                  <div className="grid grid-cols-1 gap-2 md:gap-3 lg:hidden w-full">
-                    {(slide.benefits || []).map((benefit, index) => (
-                      <div
-                        key={index}
-                        className="bg-brand-300 rounded-xl p-4 md:p-5 text-white hover:bg-brand-400 transition-all duration-300 flex flex-col h-[160px] md:h-[180px]"
-                      >
-                        {/* Icon */}
-                        <div className="mb-3">
-                          <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
-                            {benefit.icon}
-                          </div>
-                        </div>
-
-                        {/* Title */}
-                        <h3 className="text-base md:text-lg font-bold mb-2 leading-tight">
-                          {benefit.title}
-                        </h3>
-
-                        {/* Description */}
-                        <p className="text-xs md:text-sm opacity-90 leading-relaxed flex-1">
-                          {benefit.description}
-                        </p>
-                      </div>
-                    ))}
+                    {/* Buttons */}
+                    <div className="flex flex-row gap-4 justify-center items-center">
+                      {slide.primaryCta ? (
+                        <a href={slide.primaryCta.href || '#'}>
+                          <Button
+                            variant="outline"
+                            size="btn"
+                            className=" px-8 py-2 rounded-full"
+                          >
+                            {slide.primaryCta.label || 'Learn more'}
+                          </Button>
+                        </a>
+                      ) : null}
+                      {slide.secondaryCta ? (
+                        <a href={slide.secondaryCta.href || '#'}>
+                          <Button
+                            variant="solid"
+                            size="btn"
+                            className=" px-8 py-2 rounded-full text-brand-500 font-semibold"
+                          >
+                            {slide.secondaryCta.label || 'Buy Now'}
+                          </Button>
+                        </a>
+                      ) : null}
+                    </div>
                   </div>
 
-                  {/* Desktop */}
-                  <div className="hidden lg:grid grid-cols-3 gap-3 auto-rows-[minmax(100px,auto)] w-full h-full">
-                    {(slide.benefits || []).map((benefit, index) => (
-                      <div
-                        key={index}
-                        className={`${benefit.gridClass} bg-brand-300 rounded-xl p-5 text-white hover:bg-brand-400 transition-all duration-300 flex flex-col`}
-                      >
-                        {/* Icon */}
-                        <div className="mb-3">
-                          <div className="w-12 h-12 flex items-center justify-center">
-                            {benefit.icon}
+                  {/* Content Grid */}
+                  <div className="grid lg:grid-cols-2 gap-8  items-stretch">
+                    {/* Product Image */}
+                    <div className="order-1 lg:order-1 flex items-center">
+                      {slide.image ? (
+                        <img
+                          src={slide.image.src}
+                          alt={slide.image.alt || ''}
+                          className="w-full max-w-md lg:max-w-lg mx-auto"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      ) : null}
+                    </div>
+
+                    {/* Benefits Grid */}
+                    <div className="order-1 lg:order-2 flex items-center">
+                      {/* Mobile */}
+                      <div className="grid grid-cols-1 gap-2 md:gap-3 lg:hidden w-full">
+                        {(slide.benefits || []).map((benefit, index) => (
+                          <div
+                            key={index}
+                            className="bg-brand-300 rounded-xl p-4 md:p-5 text-white hover:bg-brand-400 transition-all duration-300 flex flex-col h-[160px] md:h-[180px]"
+                          >
+                            {/* Icon */}
+                            <div className="mb-3">
+                              <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
+                                {benefit.icon}
+                              </div>
+                            </div>
+
+                            {/* Title */}
+                            <h3 className="text-base md:text-lg font-bold mb-2 leading-tight">
+                              {benefit.title}
+                            </h3>
+
+                            {/* Description */}
+                            <p className="text-xs md:text-sm opacity-90 leading-relaxed flex-1">
+                              {benefit.description}
+                            </p>
                           </div>
-                        </div>
-
-                        {/* Title */}
-                        <h3 className="text-lg font-bold mb-2 leading-tight">
-                          {benefit.title}
-                        </h3>
-
-                        {/* Description */}
-                        <p className="text-sm opacity-90 leading-relaxed flex-1">
-                          {benefit.description}
-                        </p>
+                        ))}
                       </div>
-                    ))}
+
+                      {/* Desktop */}
+                      <div className="hidden lg:grid grid-cols-3 gap-3 auto-rows-[minmax(100px,auto)] w-full h-full">
+                        {(slide.benefits || []).map((benefit, index) => (
+                          <div
+                            key={index}
+                            className={`${benefit.gridClass} bg-brand-300 rounded-xl p-5 text-white hover:bg-brand-400 transition-all duration-300 flex flex-col`}
+                          >
+                            {/* Icon */}
+                            <div className="mb-3">
+                              <div className="w-12 h-12 flex items-center justify-center">
+                                {benefit.icon}
+                              </div>
+                            </div>
+
+                            {/* Title */}
+                            <h3 className="text-lg font-bold mb-2 leading-tight">
+                              {benefit.title}
+                            </h3>
+
+                            {/* Description */}
+                            <p className="text-sm opacity-90 leading-relaxed flex-1">
+                              {benefit.description}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+
+                </>
+              )}
             </div>
           ))}
         </UniversalCarousel>

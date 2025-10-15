@@ -1,4 +1,4 @@
-import { apiGetProducts } from "../api/storefront";
+import { apiGetProducts, fetchPageByHandle } from "../api/storefront";
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { apiGetCollections, apiGetCollectionByHandle } from "../api/storefront";
 
@@ -46,3 +46,11 @@ export function useCollection(handle, productsFirst = 50) {
   });
 }
 
+export function usePage(handle, options = {}) {
+  return useQuery({
+    queryKey: ["page", handle],
+    queryFn: () => fetchPageByHandle(handle),
+    enabled: !!handle,
+    ...options,
+  });
+}

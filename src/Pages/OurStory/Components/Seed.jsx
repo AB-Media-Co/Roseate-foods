@@ -7,7 +7,7 @@ function Seed() {
       <div className="text-center mt-10 md:mb-14">
         <BrandHeading
           accentWord="SPOON"
-          className="text-4xl  text-brand-500 mb-10 "
+          // className="text-4xl  text-brand-500 mb-10 "
         >
           FROM SEED TO
         </BrandHeading>

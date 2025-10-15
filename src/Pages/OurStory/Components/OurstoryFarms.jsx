@@ -14,7 +14,7 @@ const OurstoryFarms = () => {
     <section className=" py-12 md:py-16">
       {/* Heading */}
       <div className="text-center mb-10 md:mb-14">
-        <BrandHeading accentWord="FARMS" className="text-4xl  text-brand-500 mb-6">WHY ROSEATE</BrandHeading>
+        <BrandHeading accentWord="FARMS" >WHY ROSEATE</BrandHeading>
       </div>
 
       {/* Grid of badges */}

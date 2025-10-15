@@ -7,7 +7,7 @@ import Button from './ui/Button';
 const AddToCartButton = ({
   variantId,
   quantity = 1,
-  className = "w-full justify-center",
+  className = "w-full justify-center text-small",
   size = "btn",
   variant = "default",
   disabled = false,

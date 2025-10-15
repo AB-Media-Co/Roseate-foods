@@ -8,6 +8,7 @@ import {
   GET_CART_BY_ID,
   GET_COLLECTION_BY_HANDLE,
   GET_COLLECTIONS,
+  GET_PAGE_BY_HANDLE,
 } from "../graphql/queries";
 
 export async function apiGetProducts(first) {
@@ -88,4 +89,10 @@ export async function apiGetCollectionByHandle(handle, productsFirst = 50, produ
     products: c.products.edges.map(e => e.node),
     productsPageInfo: c.products.pageInfo,
   };
+}
+
+
+export async function fetchPageByHandle(handle) {
+  const data = await shopify.request(GET_PAGE_BY_HANDLE, { handle });
+  return data.page;
 }

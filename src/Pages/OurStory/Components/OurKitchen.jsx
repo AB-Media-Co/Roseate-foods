@@ -5,7 +5,7 @@ function OurKitchen() {
   return (
     <div className="content">
           <div className="text-center  mb-14 mt-20">
-            <BrandHeading accentWord="our kitchen" className="text-4xl  text-brand-500 mb-10 uppercase">What You’ll Find In <br /></BrandHeading>
+            <BrandHeading accentWord="our kitchen" >What You’ll Find In <br /></BrandHeading>
           </div>
           <iconcard className="flex justify-between mb-20 flex-col lg:flex-row">
             <icard className="flex justify-center flex-col items-center h-full w-full mb-16 ">

@@ -3,6 +3,7 @@ fragment ProductCardFields on Product {
   id
   handle
   title
+  description
   vendor
   productType
   tags
@@ -383,6 +384,24 @@ export const GET_COLLECTION_BY_HANDLE = /* GraphQL */ `
           }
         }
         pageInfo { hasNextPage endCursor }
+      }
+    }
+  }
+`;
+
+
+export const GET_PAGE_BY_HANDLE = /* GraphQL */ `
+  query GetPageByHandle($handle: String!) {
+    page(handle: $handle) {
+      id
+      title
+      handle
+      body
+      bodySummary
+      updatedAt
+      seo {
+        title
+        description
       }
     }
   }

@@ -2,6 +2,8 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { BrandHeading } from '../../../components/BrandHeading';
 import { useStorefront } from '../../../context/StorefrontContext';
 import Button from '../../../components/ui/Button';
+import Loader from '../../../components/ui/Loader';
+import Empty from '../../../components/ui/Empty';
 import UniversalCarousel from '../../../components/UniversalCarousel';
 import AddToCartButton from '../../../components/AddToCartButton';
 import { useNavigate } from "react-router-dom";
@@ -180,7 +182,7 @@ const ProductShowcase = () => {
       <section className="py-12 md:py-16">
         <div className="content">
           <div className="text-center">
-            <div className="text-body text-gray-500">Loading products...</div>
+            <Loader message="Loading products..." />
           </div>
         </div>
       </section>
@@ -194,9 +196,7 @@ const ProductShowcase = () => {
           <div className="text-center mb-10 md:mb-14">
             <BrandHeading accentWord="SHOWCASE">Product</BrandHeading>
           </div>
-          <div className="text-center text-body text-gray-500">
-            No products found for the selected category.
-          </div>
+          <Empty title="No products" message="No products found for the selected category." />
         </div>
       </section>
     );
@@ -205,18 +205,7 @@ const ProductShowcase = () => {
   return (
     <section className="py-6 md:py-10">
       <div className="content relative">
-        <div className='flex justify-end'>
-          <Button
-            variant="default"
-            size="btn"
-            className="border-brand-500 text-brand-500 hover:bg-brand-500 hover:text-white"
-            onClick={() => navigate('/collection/allproducts')}
 
-          >
-            View All
-          </Button>
-
-        </div>
 
 
         {/* Products Display - Responsive: Grid for desktop, Carousel for mobile */}
@@ -248,6 +237,18 @@ const ProductShowcase = () => {
             </UniversalCarousel>
           </div>
         )}
+        <div className='flex justify-end my-8'>
+          <Button
+            variant="default"
+            size="btn"
+            className="border-brand-500 text-brand-500 hover:bg-brand-500 hover:text-white"
+            onClick={() => navigate('/collection/allproducts')}
+
+          >
+            View All
+          </Button>
+
+        </div>
       </div>
     </section>
   );
