@@ -203,7 +203,7 @@ export default function YouMayAlsoLike() {
     });
 
     return Object.values(groups).map((variants, i) => (
-      <div className="content">
+      <div className="">
         <ProductCard key={`${stripSize(variants[0].title)}-${i}`} variants={variants} />
 
       </div>

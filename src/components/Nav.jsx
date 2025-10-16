@@ -32,7 +32,7 @@ function SkeletonItem() {
 const ProductRow = React.memo(function ProductRow({ p }) {
   return (
     <a
-      href={`/collection/products/${p.handle}`}
+      href={`/collection/product/${p.handle}`}
       className="group relative flex items-center gap-3 rounded-lg px-3 py-2 transition
                  hover:bg-gradient-to-r hover:from-brand-50/80 hover:to-transparent
                  focus:outline-none focus:ring-2 focus:ring-brand-300 will-change-transform transform-gpu"
@@ -62,10 +62,7 @@ const ProductRow = React.memo(function ProductRow({ p }) {
 });
 
 /* -------------------------- Tiny Virtual List Core ------------------------- */
-/**
- * Renders only the visible slice of items for ultra-smooth scrolling.
- * No deps needed. Assumes a fixed row height (default 56px).
- */
+
 function VirtualList({
   items,
   height = 350,
@@ -272,14 +269,14 @@ const Nav = () => {
   const goToFirstResult = () => {
     const first = filteredProducts?.[0];
     if (first?.handle) {
-      window.location.href = `/collection/products/${first.handle}`;
+      window.location.href = `/collection/product/${first.handle}`;
     }
   };
 
   return (
     <div>
       {/* ===================== MOBILE ===================== */}
-      <header className="md:hidden w-full bg-brand-500 text-white shadow-md z-50">
+      <header className="md:hidden w-full bg-white text-gray-800 shadow-md z-50">
         <nav className="flex items-center justify-between px-4 py-3">
           <button
             aria-label="Open menu"
@@ -287,80 +284,61 @@ const Nav = () => {
             className="p-2 -ml-2"
           >
             {isMobileMenuOpen ? (
-              <X className="h-6 w-6" />
+              <X className="h-6 w-6 text-brand-500" />
             ) : (
-              <Menu className="h-6 w-6" />
+              <Menu className="h-6 w-6 text-brand-500" />
             )}
           </button>
 
-          <img src="/roseateM.svg" alt="Roseate" className="w-auto" />
+          <img src="/roseate.svg" alt="Roseate" className="w-auto" />
 
-          <div className="flex items-center gap-4">
-            <button
-              aria-label="Search"
-              onClick={() => setIsMobileSearchOpen((v) => !v)}
-              className="p-1"
-            >
-              <Search className="h-6 w-6" />
-            </button>
-
-            <a href="/cart" aria-label="Cart" className="relative p-1">
-              <img src="/cartM.svg" alt="Cart" className="h-6 w-6" />
-              {totalQuantity > 0 && (
-                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] flex items-center justify-center font-medium">
-                  {totalQuantity}
-                </span>
-              )}
-            </a>
-          </div>
+          <a href="/cart" aria-label="Cart" className="relative p-1">
+            <img src="/cart.svg" alt="Cart" className="h-6 w-6" />
+            {totalQuantity > 0 && (
+              <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] flex items-center justify-center font-medium text-white">
+                {totalQuantity}
+              </span>
+            )}
+          </a>
         </nav>
 
-        {/* mobile search slide-down */}
-        <div
-          className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${isMobileSearchOpen
-            ? "grid-rows-[1fr] opacity-100"
-            : "grid-rows-[0fr] opacity-0"
-            }`}
-        >
-          <div className="overflow-hidden">
-            <div className="px-4 pb-3">
-              <div className="relative" ref={mobileSearchRef}>
-                <input
-                  type="text"
-                  placeholder="Search For Almond"
-                  className="w-full h-10 pl-4 pr-10 bg-[#E6E6E6] rounded-full font-[500] text-sm text-gray-700 placeholder:text-[#666060] focus:outline-none"
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    setIsSearchOpen(true);
-                  }}
-                  onFocus={() => setIsSearchOpen(true)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      goToFirstResult();
-                    }
-                  }}
+        {/* mobile search bar - full width below nav */}
+        <div className="px-4 pb-4 pt-2">
+          <div className="relative" ref={mobileSearchRef}>
+            <input
+              type="text"
+              placeholder="Search For Almond"
+              className="w-full h-12 pl-4 pr-12 bg-[#E6E6E6] rounded-full font-[500] text-sm text-gray-700 placeholder:text-[#666060] focus:outline-none focus:ring-2 focus:ring-brand-300"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setIsSearchOpen(true);
+              }}
+              onFocus={() => setIsSearchOpen(true)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  goToFirstResult();
+                }
+              }}
+            />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-500 transition-colors"
+            >
+              <Search className="h-5 w-5" />
+            </Button>
+            {isSearchOpen && filteredProducts.length > 0 && (
+              <div className="absolute left-0 right-0 mt-2 rounded-xl border border-gray-100 bg-white shadow-xl ring-1 ring-black/5 z-50">
+                <VirtualList
+                  items={filteredProducts}
+                  height={300}
+                  itemHeight={56}
+                  overscan={6}
+                  renderItem={(p) => <ProductRow key={p.id} p={p} />}
                 />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-500 transition-colors"
-                >
-                  <Search />
-                </Button>
-                {isSearchOpen && filteredProducts.length > 0 && (
-                  <div className="absolute left-0 right-0 mt-2 rounded-xl border border-gray-100 bg-white shadow-xl ring-1 ring-black/5 z-50">
-                    <VirtualList
-                      items={filteredProducts}
-                      height={300}
-                      itemHeight={56}
-                      overscan={6}
-                      renderItem={(p) => <ProductRow key={p.id} p={p} />}
-                    />
-                  </div>
-                )}
               </div>
-            </div>
+            )}
           </div>
         </div>
 

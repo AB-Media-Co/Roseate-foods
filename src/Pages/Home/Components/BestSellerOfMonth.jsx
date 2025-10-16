@@ -69,7 +69,7 @@ const BestSellerOfMonth = () => {
         {/* Product Image */}
         <div className="p-8 pb-2">
           {image
-            ? <img src={image} alt={product.title || "Product"} className="w-[120px] h-[160px] object-contain mx-auto" />
+            ? <img src={image} alt={product.title || "Product"} className=" object-contain mx-auto" />
             : <div className="w-full h-24 bg-gray-100 flex items-center justify-center text-gray-400">No Image</div>
           }
         </div>

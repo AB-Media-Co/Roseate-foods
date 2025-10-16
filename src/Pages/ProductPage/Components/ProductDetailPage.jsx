@@ -177,7 +177,7 @@ const ProductDetailPage = () => {
               {(images.length ? images : [sel?.featuredImage?.url]).map((src, i) => (
                 <SwiperSlide key={i}>
                   <div
-                    className="aspect-[3/4] w-full h-[750px] flex border border-[#F2F2F2] bg-[#F2F2F2] items-center justify-center cursor-zoom-in"
+                    className="aspect-[3/4] w-full h-[400px] sm:h-[750px] flex border border-[#F2F2F2] bg-[#F2F2F2] items-center justify-center cursor-zoom-in"
                     onClick={() => { setLightboxIdx(i); setIsLightboxOpen(true) }}
                   >
                     <img src={src} alt={sel?.title} className="max-h-full p-6 object-contain" />
@@ -223,12 +223,12 @@ const ProductDetailPage = () => {
           </div>
 
           {images.length > 1 && (
-            <div className="mt-3 flex gap-3">
+            <div className="mt-3 flex gap-2 sm:gap-3 overflow-x-auto pb-2 scrollbar-hide">
               {images.map((src, i) => (
                 <button
                   key={i}
                   onClick={() => { setActiveIdx(i); mainSwiper?.slideToLoop ? mainSwiper.slideToLoop(i) : mainSwiper?.slideTo(i); }}
-                  className={`w-[120px] h-[120px] rounded-xl border border-[#F2F2F2] bg-[#F2F2F2] overflow-hidden ${activeIdx === i ? 'ring-2 ring-[var(--color-brand-500)]' : ''}`}
+                  className={`flex-shrink-0 w-[80px] h-[80px] sm:w-[120px] sm:h-[120px] rounded-xl border border-[#F2F2F2] bg-[#F2F2F2] overflow-hidden ${activeIdx === i ? 'ring-2 ring-[var(--color-brand-500)]' : ''}`}
                 >
                   <img src={src} alt={`thumb-${i}`} className="w-full h-full object-cover" />
                 </button>
