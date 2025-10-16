@@ -64,18 +64,30 @@ const defaultBenefits = [
 const FuelYourDay = ({ slides }) => {
 
   const defaultSlides = [
+    // {
+    //   titleLine: 'FUEL YOUR DAY WITH',
+    //   brandHeadingMain: "NATURE'S",
+    //   brandHeadingAccent: 'PERFECT BENEFIT',
+    //   primaryCta: { label: 'Learn more', href: '#' },
+    //   secondaryCta: { label: 'Buy Almonds', href: '#' },
+    //   image: { src: '/Home/fueldayImage.png', alt: 'Roseate Farms Premium Almonds Package' },
+    //   benefits: defaultBenefits,
+    // },
     {
-      titleLine: 'FUEL YOUR DAY WITH',
-      brandHeadingMain: "NATURE'S",
-      brandHeadingAccent: 'PERFECT BENEFIT',
-      primaryCta: { label: 'Learn more', href: '#' },
-      secondaryCta: { label: 'Buy Almonds', href: '#' },
-      image: { src: '/Home/fueldayImage.png', alt: 'Roseate Farms Premium Almonds Package' },
-      benefits: defaultBenefits,
+      image: {
+        src: '/perfectBenifit.jpg',
+        alt: 'Almond Benefits Banner'
+      }
     },
     {
       image: {
-        src: '/perfectBenifit.png',
+        src: '/PerfectBenitit3.jpg',
+        alt: 'Almond Benefits Banner'
+      }
+    },
+    {
+      image: {
+        src: '/perfectBenifit.jpg',
         alt: 'Almond Benefits Banner'
       }
     }
@@ -84,7 +96,7 @@ const FuelYourDay = ({ slides }) => {
   const slidesData = Array.isArray(slides) && slides.length ? slides : defaultSlides;
 
   return (
-    <section className="bg-brand-500 py-16 md:py-20 lg:py-24">
+    <section className="bg-brand-500 py-2 md:py-4 ">
       <div className="content">
         <UniversalCarousel
           mode="cards"
