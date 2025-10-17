@@ -144,13 +144,13 @@ const Footer = () => {
   const LinkList = ({ links, title }) => (
     <div>
       <h4 className="text-small font-semibold uppercase tracking-wide mb-4">{title}</h4>
-      <ul className="space-y-2 md:space-y-2.5 lg:space-y-2">
+      <div className="space-y-2 md:space-y-2.5 lg:space-y-2">
         {links.map((link) => (
-          <li key={link.text}>
+          <div key={link.text}>
             <a href={link.href} className="text-small hover:opacity-80 transition-opacity">{link.text}</a>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 
