@@ -229,7 +229,7 @@ const ProductDetailPage = () => {
                 <button
                   key={i}
                   onClick={() => { setActiveIdx(i); mainSwiper?.slideToLoop ? mainSwiper.slideToLoop(i) : mainSwiper?.slideTo(i); }}
-                  className={`flex-shrink-0 w-[80px] h-[80px] sm:w-[120px] sm:h-[120px] rounded-xl border border-[#F2F2F2] bg-[#F2F2F2] overflow-hidden ${activeIdx === i ? 'ring-2 ring-[var(--color-brand-500)]' : ''}`}
+                  className={`flex-shrink-0 w-[80px] h-[80px] my-6 mx-2 sm:w-[120px] sm:h-[120px] rounded-xl border border-[#F2F2F2] bg-[#F2F2F2] overflow-hidden ${activeIdx === i ? 'ring-2 ring-[var(--color-brand-500)]' : ''}`}
                 >
                   <img src={src} alt={`thumb-${i}`} className="w-full h-full object-cover" />
                 </button>

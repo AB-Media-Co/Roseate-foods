@@ -179,6 +179,7 @@ const groupProductsByBase = (products = []) => {
             compareAt,
             variantId,
             productId: p.id,
+            handle: p?.handle || null,
             image
         });
 
@@ -189,6 +190,8 @@ const groupProductsByBase = (products = []) => {
         const priced = g.options.filter((o) => o.price != null);
         g.options = (priced.length ? priced : g.options).sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
         if (g.options[0]?.image) g.image = g.options[0].image;
+        g.handle = g.options[0]?.handle || g.handle || null;
+
         return g;
     });
 
@@ -199,6 +202,8 @@ const groupProductsByBase = (products = []) => {
 /* ---------------------- Card ---------------------- */
 
 const ProductCard = ({ product, isAllProductsPage = false }) => {
+
+
     const isGrouped = isAllProductsPage && Array.isArray(product?.options);
     const [selectedIdx, setSelectedIdx] = useState(0);
 
@@ -209,6 +214,7 @@ const ProductCard = ({ product, isAllProductsPage = false }) => {
         comparePrice,
         rating,
         reviewCount,
+        handle,
         variantId
     } = useMemo(() => {
         if (isGrouped) {
@@ -220,6 +226,7 @@ const ProductCard = ({ product, isAllProductsPage = false }) => {
                 comparePrice: opt?.compareAt ?? null,
                 rating: product.rating ?? 0,
                 reviewCount: product.ratingCount ?? 0,
+                handle: opt?.handle || product?.handle || null,
                 variantId: opt?.variantId ?? null
             };
         }
@@ -249,7 +256,9 @@ const ProductCard = ({ product, isAllProductsPage = false }) => {
             variantId:
                 product?.variants?.edges?.[0]?.node?.id ||
                 product?.variants?.[0]?.id ||
-                null
+                null,
+            handle: product?.handle || null
+
         };
     }, [isGrouped, product, selectedIdx]);
 
@@ -601,7 +610,7 @@ const ShowProductsSection = () => {
                 <div>
                     <span className="inline-block rounded-full px-4 py-2 text-small font-medium" style={{ color: "var(--color-brand-600)", backgroundColor: "rgba(19,125,103,0.08)" }}>
                         {/* All Products */}
-                       { headingMain  + " " + headingAccent}
+                        {headingMain + " " + headingAccent}
                     </span>
                 </div>
                 <div className="flex items-center gap-3">
