@@ -33,8 +33,6 @@ const Home = () => {
     }
   ];
 
-  // Dummy testimonials data
-// Updated testimonials data (drop-in replace)
 const testimonials = [
   {
     id: 1,
