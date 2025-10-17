@@ -13,7 +13,7 @@ function CategoryCard({ product }) {
   const navigate = useNavigate()
 
   return (
-    <article className="flex flex-col items-center justify-start">
+    <article className="flex flex-col my-2 items-center justify-start">
       {/* round image frame */}
       <div
         className="

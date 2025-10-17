@@ -20,7 +20,7 @@ import ShippingPolicy from "./Pages/PolicyPages/ShippingPolicy";
 import TermsOfServices from "./Pages/PolicyPages/TermsOfServices";
 import CustomerSupport from "./Pages/PolicyPages/CustomerSupport";
 import BestSellerPage from "./Pages/BestSeller/BestSellerPage";
-
+import './App.css'
 function App() {
   return (
     <Router>
