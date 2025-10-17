@@ -55,8 +55,8 @@ const AddToCartButton = ({
       if (showSuccessToast) {
         const message = successMessage || 
           (productTitle 
-            ? `🎉 ${productTitle} added to cart!` 
-            : `✓ ${quantity} item${quantity > 1 ? 's' : ''} added to cart!`);
+            ? `${productTitle} added to cart!` 
+            : `${quantity} item${quantity > 1 ? 's' : ''} added to cart!`);
         toast.success(message);
       }
       
@@ -67,9 +67,9 @@ const AddToCartButton = ({
       // Error handling with user-friendly toast
       if (showErrorToast) {
         const message = error.message.includes('inventory') 
-          ? '🚨 Sorry, this item is out of stock'
+          ? 'Sorry, this item is out of stock'
           : error.message.includes('network') || error.message.includes('fetch')
-            ? '🌐 Network error. Please try again.'
+            ? ' Network error. Please try again.'
             : '❌ Failed to add to cart. Please try again.';
         toast.error(message);
       }
