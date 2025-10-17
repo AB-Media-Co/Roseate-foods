@@ -135,7 +135,7 @@ function ProductCard({ variants }) {
           );
         })}
         <span className="ml-1 text-small text-gray-600">
-          {rating ? rating.toFixed(1) : "—"}
+          {rating ? rating.toFixed(1) : "0"}
           {ratingCount ? ` (${ratingCount})` : ""}
         </span>
       </div>
@@ -166,7 +166,7 @@ function ProductCard({ variants }) {
         showErrorToast
         className="mt-1 inline-flex items-center justify-center rounded-full text-white text-small h-10 px-5 bg-[var(--color-brand-500)] hover:bg-[var(--color-brand-600)] transition-colors"
       >
-        Buy Now
+        Add To Cart
       </AddToCartButton>
     </div>
   );

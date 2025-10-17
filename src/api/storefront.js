@@ -10,6 +10,7 @@ import {
   GET_COLLECTIONS,
   GET_PAGE_BY_HANDLE,
 } from "../graphql/queries";
+import { GET_ALL_MENUS } from "../graphql/queries";
 
 export async function apiGetProducts(first) {
   const data = await shopify.request(GET_PRODUCTS, { first });
@@ -95,4 +96,42 @@ export async function apiGetCollectionByHandle(handle, productsFirst = 50, produ
 export async function fetchPageByHandle(handle) {
   const data = await shopify.request(GET_PAGE_BY_HANDLE, { handle });
   return data.page;
+}
+
+// ---- Menus ----
+export async function apiGetAllMenus() {
+  const data = await shopify.request(GET_ALL_MENUS, {});
+
+  const normalizeItems = (items = []) =>
+    items.map((it) => ({
+      id: it.id,
+      title: it.title,
+      url: it.url,
+      type: it.type,
+      // resource handle if link is an internal resource
+      resource:
+        it.resource
+          ? {
+              __typename: it.resource.__typename,
+              handle:
+                it.resource.handle ?? null,
+            }
+          : null,
+      items: it.items ? normalizeItems(it.items) : [],
+    }));
+
+  const normalizeMenu = (m) =>
+    m
+      ? {
+          id: m.id,
+          title: m.title,
+          items: normalizeItems(m.items),
+        }
+      : null;
+
+  return {
+    main: normalizeMenu(data?.mainMenu),
+    footer: normalizeMenu(data?.footerMenu),
+    account: normalizeMenu(data?.customerAccountMenu),
+  };
 }

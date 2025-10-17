@@ -389,15 +389,18 @@ const ShowProductsSection = () => {
     // close other dropdowns when opening one
     const togglePriceMenu = () => {
         setShowPriceMenu((v) => {
-            const next = !v; if (next) { setShowCatMenu(false); setShowAvailMenu(false); } return next; });
+            const next = !v; if (next) { setShowCatMenu(false); setShowAvailMenu(false); } return next;
+        });
     };
     const toggleCatMenu = () => {
         setShowCatMenu((v) => {
-            const next = !v; if (next) { setShowPriceMenu(false); setShowAvailMenu(false); } return next; });
+            const next = !v; if (next) { setShowPriceMenu(false); setShowAvailMenu(false); } return next;
+        });
     };
     const toggleAvailMenu = () => {
         setShowAvailMenu((v) => {
-            const next = !v; if (next) { setShowPriceMenu(false); setShowCatMenu(false); } return next; });
+            const next = !v; if (next) { setShowPriceMenu(false); setShowCatMenu(false); } return next;
+        });
     };
 
     // outside click to close menus
@@ -550,6 +553,34 @@ const ShowProductsSection = () => {
         if (!collectionData?.pages?.length) return <Empty title="No collection" message="Collection not found." />;
     }
 
+    const toTitleCase = (s = "") =>
+        s
+            .replace(/[-_]+/g, " ")
+            .replace(/\s+/g, " ")
+            .trim()
+            .replace(/\b\w/g, (c) => c.toUpperCase());
+
+    /** Build "All X" and accent the last word (PRODUCTS / CASHEW / FRUITS) */
+    const makeAllHeadingParts = (title = "") => {
+        const clean = (title || "").trim();
+        const words = clean.split(/\s+/);
+        if (!clean) return { main: "All", accent: "PRODUCTS" };
+
+        // prefix "All " then accent the last word in the full phrase
+        const prefixed = ["All", ...words]; // ["All", "Dry", "Fruits"]
+        const main = prefixed.slice(0, -1).join(" "); // "All Dry"
+        const accent = prefixed[prefixed.length - 1].toUpperCase(); // "FRUITS"
+        return { main, accent };
+    };
+
+
+    const baseTitle = isAllProductsPage
+        ? "Products"
+        : (collectionData?.pages?.[0]?.title || toTitleCase(handle || "Products"));
+
+    const { main: headingMain, accent: headingAccent } = makeAllHeadingParts(baseTitle);
+
+
     return (
         <div className="content py-8">
             {/* Filters Bar */}
@@ -569,7 +600,8 @@ const ShowProductsSection = () => {
             <div className="hidden md:flex items-center justify-between mb-6">
                 <div>
                     <span className="inline-block rounded-full px-4 py-2 text-small font-medium" style={{ color: "var(--color-brand-600)", backgroundColor: "rgba(19,125,103,0.08)" }}>
-                        All Products
+                        {/* All Products */}
+                       { headingMain  + " " + headingAccent}
                     </span>
                 </div>
                 <div className="flex items-center gap-3">
@@ -717,8 +749,8 @@ const ShowProductsSection = () => {
                         <div className="mb-4">
                             <div className="text-sm font-medium text-gray-700 mb-2">Price</div>
                             <div className="grid grid-cols-2 gap-2">
-                                <button className={`rounded-full border px-3 py-2 text-sm ${priceSort==='asc' ? 'bg-[var(--color-brand-50)] border-[var(--color-brand-500)] text-[var(--color-brand-600)]' : ''}`} onClick={() => setPriceSort('asc')}>Low → High</button>
-                                <button className={`rounded-full border px-3 py-2 text-sm ${priceSort==='desc' ? 'bg-[var(--color-brand-50)] border-[var(--color-brand-500)] text-[var(--color-brand-600)]' : ''}`} onClick={() => setPriceSort('desc')}>High → Low</button>
+                                <button className={`rounded-full border px-3 py-2 text-sm ${priceSort === 'asc' ? 'bg-[var(--color-brand-50)] border-[var(--color-brand-500)] text-[var(--color-brand-600)]' : ''}`} onClick={() => setPriceSort('asc')}>Low → High</button>
+                                <button className={`rounded-full border px-3 py-2 text-sm ${priceSort === 'desc' ? 'bg-[var(--color-brand-50)] border-[var(--color-brand-500)] text-[var(--color-brand-600)]' : ''}`} onClick={() => setPriceSort('desc')}>High → Low</button>
                             </div>
                         </div>
 
@@ -741,10 +773,10 @@ const ShowProductsSection = () => {
                                         }}
                                     ></div>
                                     <input type="range" min={priceBounds.min} max={priceBounds.max} step={1} value={rangeMin ?? priceBounds.min}
-                                        onChange={(e)=>{ const v=Math.min(Number(e.target.value),(rangeMax ?? priceBounds.max)-1); setRangeMin(v); }}
+                                        onChange={(e) => { const v = Math.min(Number(e.target.value), (rangeMax ?? priceBounds.max) - 1); setRangeMin(v); }}
                                         className="absolute w-full appearance-none bg-transparent" style={{ WebkitAppearance: 'none', height: '6px' }} />
                                     <input type="range" min={priceBounds.min} max={priceBounds.max} step={1} value={rangeMax ?? priceBounds.max}
-                                        onChange={(e)=>{ const v=Math.max(Number(e.target.value),(rangeMin ?? priceBounds.min)+1); setRangeMax(v); }}
+                                        onChange={(e) => { const v = Math.max(Number(e.target.value), (rangeMin ?? priceBounds.min) + 1); setRangeMax(v); }}
                                         className="absolute w-full appearance-none bg-transparent" style={{ WebkitAppearance: 'none', height: '6px' }} />
                                 </div>
                             </div>
@@ -754,13 +786,13 @@ const ShowProductsSection = () => {
                         <div className="mb-6">
                             <div className="text-sm font-medium text-gray-700 mb-2">Sort by name</div>
                             <div className="flex items-center gap-2 mb-3">
-                                <button className={`rounded-full border px-3 py-1 text-xs ${nameSort==='az' ? 'bg-[var(--color-brand-50)] border-[var(--color-brand-500)] text-[var(--color-brand-600)]' : ''}`} onClick={() => setNameSort('az')}>A–Z</button>
-                                <button className={`rounded-full border px-3 py-1 text-xs ${nameSort==='za' ? 'bg-[var(--color-brand-50)] border-[var(--color-brand-500)] text-[var(--color-brand-600)]' : ''}`} onClick={() => setNameSort('za')}>Z–A</button>
+                                <button className={`rounded-full border px-3 py-1 text-xs ${nameSort === 'az' ? 'bg-[var(--color-brand-50)] border-[var(--color-brand-500)] text-[var(--color-brand-600)]' : ''}`} onClick={() => setNameSort('az')}>A–Z</button>
+                                <button className={`rounded-full border px-3 py-1 text-xs ${nameSort === 'za' ? 'bg-[var(--color-brand-50)] border-[var(--color-brand-500)] text-[var(--color-brand-600)]' : ''}`} onClick={() => setNameSort('za')}>Z–A</button>
                             </div>
                             <div className="text-sm font-medium text-gray-700 mb-2">Sort by date</div>
                             <div className="flex items-center gap-2">
-                                <button className={`rounded-full border px-3 py-1 text-xs ${dateSort==='new' ? 'bg-[var(--color-brand-50)] border-[var(--color-brand-500)] text-[var(--color-brand-600)]' : ''}`} onClick={() => setDateSort('new')}>Newest</button>
-                                <button className={`rounded-full border px-3 py-1 text-xs ${dateSort==='old' ? 'bg-[var(--color-brand-50)] border-[var(--color-brand-500)] text-[var(--color-brand-600)]' : ''}`} onClick={() => setDateSort('old')}>Oldest</button>
+                                <button className={`rounded-full border px-3 py-1 text-xs ${dateSort === 'new' ? 'bg-[var(--color-brand-50)] border-[var(--color-brand-500)] text-[var(--color-brand-600)]' : ''}`} onClick={() => setDateSort('new')}>Newest</button>
+                                <button className={`rounded-full border px-3 py-1 text-xs ${dateSort === 'old' ? 'bg-[var(--color-brand-50)] border-[var(--color-brand-500)] text-[var(--color-brand-600)]' : ''}`} onClick={() => setDateSort('old')}>Oldest</button>
                             </div>
                         </div>
 
@@ -768,11 +800,11 @@ const ShowProductsSection = () => {
                         <div className="mb-6">
                             <div className="text-sm font-medium text-gray-700 mb-2">Availability</div>
                             <label className="flex items-center gap-2 text-sm mb-2">
-                                <input type="checkbox" checked={availability.in} onChange={(e)=>setAvailability(v=>({ ...v, in: e.target.checked }))} />
+                                <input type="checkbox" checked={availability.in} onChange={(e) => setAvailability(v => ({ ...v, in: e.target.checked }))} />
                                 <span>In Stock ({inStockCount})</span>
                             </label>
                             <label className="flex items-center gap-2 text-sm">
-                                <input type="checkbox" checked={availability.out} onChange={(e)=>setAvailability(v=>({ ...v, out: e.target.checked }))} />
+                                <input type="checkbox" checked={availability.out} onChange={(e) => setAvailability(v => ({ ...v, out: e.target.checked }))} />
                                 <span>Out Stock ({outStockCount})</span>
                             </label>
                         </div>
@@ -802,10 +834,10 @@ const ShowProductsSection = () => {
             {/* Header */}
             <div className="text-center my-10 md:my-14">
                 <BrandHeading
-                    accentWord="PRODUCTS"
+                    accentWord={headingAccent}
                     className="text-subheading text-brand-500 uppercase mb-4"
                 >
-                    All
+                    {headingMain}
                 </BrandHeading>
                 <p className="text-body text-gray-600 max-w-2xl mx-auto">
                     Explore Our Entire Range of Natural Goodness: Uncompromising Quality in Every Product We Offer.

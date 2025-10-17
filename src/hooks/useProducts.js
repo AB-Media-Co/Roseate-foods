@@ -1,6 +1,11 @@
-import { apiGetProducts, fetchPageByHandle } from "../api/storefront";
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
-import { apiGetCollections, apiGetCollectionByHandle } from "../api/storefront";
+import {
+  apiGetProducts,
+  fetchPageByHandle,
+  apiGetCollections,
+  apiGetCollectionByHandle,
+  apiGetAllMenus, // 👈 import this
+} from "../api/storefront";
 
 export function useProducts(first = 50) {
   return useQuery({
@@ -10,9 +15,8 @@ export function useProducts(first = 50) {
   });
 }
 
-
 // basic list
-export function useCollections(first=50) {
+export function useCollections(first = 50) {
   return useQuery({
     queryKey: ["collections", first],
     queryFn: () => apiGetCollections(first),
@@ -52,5 +56,19 @@ export function usePage(handle, options = {}) {
     queryFn: () => fetchPageByHandle(handle),
     enabled: !!handle,
     ...options,
+  });
+}
+
+/* -----------------------------
+   ✅ NEW: All Menus hook
+------------------------------ */
+export function useMenus(options = {}) {
+  const { enabled = true, staleTime = 60_000 } = options;
+
+  return useQuery({
+    queryKey: ["menus", "all"],
+    queryFn: () => apiGetAllMenus(),
+    enabled,
+    staleTime,
   });
 }

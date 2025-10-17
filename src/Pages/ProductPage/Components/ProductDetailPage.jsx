@@ -89,6 +89,7 @@ const ProductDetailPage = () => {
   }, [group, selIdx, current])
 
   console.log(sel, ",@alala")
+  const MAX_QTY = 5;
 
   // pricing
   const price = sel?.priceRange?.minVariantPrice?.amount ?? sel?.variants?.[0]?.price ?? sel?.price ?? null
@@ -289,30 +290,35 @@ const ProductDetailPage = () => {
           {/* quantity + buttons */}
           <div className="flex items-center gap-4 flex-wrap">
             {/* Quantity controls styled as circular buttons */}
+            {/* Quantity controls styled as circular buttons */}
             <div className="flex items-center gap-4">
               <button
-                className="w-14 h-14 cursor-pointer rounded-full border border-gray-300 flex items-center justify-center text-2xl leading-none"
+                className="w-14 h-14 cursor-pointer rounded-full border border-gray-300 flex items-center justify-center text-2xl leading-none disabled:opacity-50"
                 onClick={() => setQty((q) => Math.max(1, q - 1))}
                 aria-label="Decrease quantity"
+                disabled={qty <= 1}
               >
                 −
               </button>
+
               <span className="text-xl font-medium select-none min-w-[16px] text-center">{qty}</span>
+
               <button
-                className="w-14 h-14 cursor-pointer rounded-full border border-gray-300 flex items-center justify-center text-2xl leading-none"
-                onClick={() => setQty((q) => q + 1)}
+                className="w-14 h-14 cursor-pointer rounded-full border border-gray-300 flex items-center justify-center text-2xl leading-none disabled:opacity-50"
+                onClick={() => setQty((q) => Math.min(MAX_QTY, q + 1))}
                 aria-label="Increase quantity"
+                disabled={qty >= MAX_QTY}
               >
                 +
               </button>
-
             </div>
+
 
             {/* Action buttons */}
             <div className="flex items-center gap-4">
               <AddToCartButton
                 variantId={variantId}
-                quantity={qty}
+                quantity={Math.min(MAX_QTY, Math.max(1, qty))}
                 productTitle={stripSize(sel?.title)}
                 size="btn"
                 className="px-8 min-w-[170px] rounded-full text-white"
@@ -322,7 +328,7 @@ const ProductDetailPage = () => {
 
               <AddToCartButton
                 variantId={variantId}
-                quantity={qty}
+                quantity={Math.min(MAX_QTY, Math.max(1, qty))}
                 productTitle={stripSize(sel?.title)}
                 size="btn"
                 className="px-8 min-w-[170px] rounded-full text-white"
@@ -376,7 +382,7 @@ const ProductDetailPage = () => {
           </div>
 
           {/* accordions */}
-          <details open className="group mt-4 border border-[#F2F2F2] bg-[#F2F2F2] rounded-4xl p-3">
+          <details open className="group mt-4 border border-[#F2F2F2] bg-[#F2F2F2] rounded-4xl p-6">
             <summary className="cursor-pointer font-medium flex items-center justify-between">
               <span>Shipping Details</span>
               <svg className="w-5 h-5 opacity-70 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
@@ -385,7 +391,7 @@ const ProductDetailPage = () => {
               Your order is packed with care and dispatched within 24 hours. Expect safe, hygienic delivery at your doorstep in 3–7 business days. Free shipping available on orders above ₹499.
             </div>
           </details>
-          <details className="group border border-[#F2F2F2] bg-[#F2F2F2] rounded-4xl p-3">
+          <details className="group border border-[#F2F2F2] bg-[#F2F2F2] rounded-4xl p-6">
             <summary className="cursor-pointer font-medium flex items-center justify-between">
               <span>Description</span>
               <svg className="w-5 h-5 opacity-70 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
@@ -394,7 +400,7 @@ const ProductDetailPage = () => {
               {sel?.description || 'Delicious and nutritious — perfect for snacking and cooking.'}
             </div>
           </details>
-          <details className="group border border-[#F2F2F2] bg-[#F2F2F2] rounded-4xl p-3">
+          <details className="group border border-[#F2F2F2] bg-[#F2F2F2] rounded-4xl p-6">
             <summary className="cursor-pointer font-medium flex items-center justify-between">
               <span>Other Details</span>
               <svg className="w-5 h-5 opacity-70 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>

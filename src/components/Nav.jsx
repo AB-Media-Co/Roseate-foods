@@ -1,20 +1,26 @@
 // src/components/Nav.jsx
 import React, { useMemo, useState, useRef, useEffect } from "react";
-import {
-  Search,
-  User,
-  ShoppingCart,
-  ChevronDown,
-  Heart,
-  Menu,
-  X,
-} from "lucide-react";
+import { Search, ChevronDown, Menu, X } from "lucide-react";
 import Button from "./ui/Button";
 import { useStorefront } from "../context/StorefrontContext";
 import { useCart } from "../state/CartProvider";
 import { Link } from "react-router-dom";
+import { useMenus } from "../hooks/useProducts";
 
-/* --------------------------------- Shared --------------------------------- */
+/* ------------------------------ small helpers ------------------------------ */
+
+function toPath(url = "") {
+  // Convert Shopify absolute menu URLs to router paths
+  if (!url) return "/";
+  try {
+    const u = new URL(url);
+    return `${u.pathname}${u.search || ""}` || "/";
+  } catch {
+    return url.startsWith("http") ? "/" : url;
+  }
+}
+
+/* -------------------------------- Skeleton -------------------------------- */
 
 function SkeletonItem() {
   return (
@@ -28,14 +34,15 @@ function SkeletonItem() {
   );
 }
 
-/* Ultra-light, memoized row */
+/* -------------------- search suggestion row (kept as-is) ------------------- */
+
 const ProductRow = React.memo(function ProductRow({ p }) {
   return (
     <a
       href={`/collection/product/${p.handle}`}
       className="group relative flex items-center gap-3 rounded-lg px-3 py-2 transition
                  hover:bg-gradient-to-r hover:from-brand-50/80 hover:to-transparent
-                 focus:outline-none focus:ring-2 focus:ring-brand-300 will-change-transform transform-gpu"
+                 focus:outline-none focus:ring-2 focus:ring-brand-300 transform-gpu"
     >
       <div className="relative flex-shrink-0 h-12 w-12 overflow-hidden rounded-md bg-gray-50 ring-1 ring-gray-200">
         <img
@@ -56,12 +63,12 @@ const ProductRow = React.memo(function ProductRow({ p }) {
         </div>
         <div className="text-xs text-gray-500">View details</div>
       </div>
-      <ChevronDown className="ml-auto h-4 w-4 opacity-0 -rotate-90 transition group-hover:opacity-60 transform-gpu" />
+      <ChevronDown className="ml-auto h-4 w-4 opacity-0 -rotate-90 transition group-hover:opacity-60" />
     </a>
   );
 });
 
-/* -------------------------- Tiny Virtual List Core ------------------------- */
+/* ------------------------------ tiny virtual list ----------------------------- */
 
 function VirtualList({
   items,
@@ -73,42 +80,27 @@ function VirtualList({
   style = {},
 }) {
   const [scrollTop, setScrollTop] = useState(0);
-  const ref = useRef(null);
   const rafRef = useRef(null);
 
-  // rAF-throttled onScroll to cut state updates
   const onScroll = (e) => {
     const top = e.currentTarget.scrollTop;
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    rafRef.current = requestAnimationFrame(() => {
-      setScrollTop(top);
-    });
+    rafRef.current = requestAnimationFrame(() => setScrollTop(top));
   };
 
-  useEffect(() => {
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, []);
+  useEffect(() => () => rafRef.current && cancelAnimationFrame(rafRef.current), []);
 
   const total = items?.length ?? 0;
-  // Add vertical padding so the last item can scroll fully above the bottom fade
-  const verticalPadding = 16; // 8px top + 8px bottom
+  const verticalPadding = 16;
   const totalHeight = total * itemHeight + verticalPadding;
   const visibleCount = Math.ceil(height / itemHeight);
   const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
-  const endIndex = Math.min(
-    total - 1,
-    startIndex + visibleCount + overscan * 2
-  );
-  const offsetY = startIndex * itemHeight + 8; // account for top padding
-
-  // If few items, render all (no virtualization overhead)
+  const endIndex = Math.min(total - 1, startIndex + visibleCount + overscan * 2);
+  const offsetY = startIndex * itemHeight + 8;
   const renderAll = totalHeight <= height;
 
   return (
     <div
-      ref={ref}
       onScroll={onScroll}
       className={`relative overflow-y-auto ${className}`}
       style={{
@@ -122,19 +114,17 @@ function VirtualList({
         scrollbarGutter: "stable",
       }}
     >
-      {/* fades */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-4 bg-gradient-to-b from-white to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-4 bg-gradient-to-t from-white to-transparent" />
-
       {renderAll ? (
         <div className="py-2">{items.map(renderItem)}</div>
       ) : (
         <div style={{ height: totalHeight, position: "relative" }}>
           <div
-            className="absolute left-0 right-0 will-change-transform transform-gpu"
+            className="absolute left-0 right-0"
             style={{ transform: `translateY(${offsetY}px)` }}
           >
-            {items.slice(startIndex, endIndex + 1).map((item) => renderItem(item))}
+            {items.slice(startIndex, endIndex + 1).map((it) => renderItem(it))}
           </div>
         </div>
       )}
@@ -142,99 +132,77 @@ function VirtualList({
   );
 }
 
-/* --------------------------- Products Dropdown UI -------------------------- */
+/* ------------------------- desktop dropdown from menu ------------------------ */
 
-function ProductsDropdown({
-  isOpen,
-  onToggle,
-  products,
-  loading,
-  variant = "desktop",
-}) {
-  const listHeight = 350;
-  const rowHeight = 56; // matches px-3 py-2 + content
-
-  const listContent = loading ? (
-    <div className="p-2">
-      <SkeletonItem />
-      <SkeletonItem />
-      <SkeletonItem />
-    </div>
-  ) : (
-    <VirtualList
-      items={products ?? []}
-      height={listHeight}
-      itemHeight={rowHeight}
-      overscan={8}
-      className="relative"
-      style={{}}
-      renderItem={(p) => <ProductRow key={p.id} p={p} />}
-    />
-  );
-
-  if (variant === "mobile") {
-    return (
-      <div className="w-full">
-        <button
-          className="w-full flex items-center justify-between py-2"
-          onClick={onToggle}
-        >
-          <span>PRODUCTS</span>
-          <ChevronDown
-            className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""
-              }`}
-          />
-        </button>
-
-        <div
-          className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-            }`}
-        >
-          <div className="overflow-hidden ml-2">
-            {/* Solid bg; no blur */}
-            <div className="rounded-xl border border-white/10 bg-white/95 px-1">
-              {listContent}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isOpen) return null;
+function MenuDropdown({ items = [] }) {
   return (
-    <div className="absolute top-full left-0 mt-1 w-[320px] rounded-xl border border-gray-100 bg-white shadow-xl ring-1 ring-black/5 z-50">
-      {/* header bar */}
-      <div className="flex items-center justify-between px-3 pt-3 pb-2">
-        <span className="text-xs font-semibold tracking-wider text-gray-600">
-          PRODUCTS
-        </span>
-        <span className="text-[10px] text-gray-400">Scroll to see more</span>
-      </div>
-
-      {listContent}
-
-      {/* soft edge */}
-      <div className="pointer-events-none absolute inset-x-0 -top-3 h-3 bg-gradient-to-b from-transparent to-white/0" />
+    <div className="absolute top-full left-0 mt-1 min-w-[200px] rounded-xl border border-gray-100 bg-white shadow-xl ring-1 ring-black/5 z-50">
+      <ul className="py-2">
+        {items.map((child) => (
+          <li key={child.id}>
+            <Link
+              to={toPath(child.url)}
+              className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-50"
+            >
+              {child.title}
+            </Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
 
-/* --------------------------------- Main ---------------------------------- */
+/* ----------------------------- mobile accordion ----------------------------- */
+
+function MobileAccordion({ title, items = [] }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="w-full">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="w-full flex items-center justify-between py-2"
+      >
+        <span>{title?.toUpperCase?.() || title}</span>
+        <ChevronDown className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+      <div
+        className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${
+          open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+        }`}
+      >
+        <div className="overflow-hidden ml-2">
+          <div className="rounded-xl border border-white/10 bg-white/95">
+            <ul className="py-1">
+              {items.map((ci) => (
+                <li key={ci.id}>
+                  <Link to={toPath(ci.url)} className="block px-4 py-2 text-sm text-gray-800">
+                    {ci.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------------------------------- NAV ---------------------------------- */
 
 const Nav = () => {
-  const [isProductsOpen, setIsProductsOpen] = useState(false); // desktop
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobileProductsOpen, setIsMobileProductsOpen] = useState(false);
-  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
-  const { products, productsLoading } = useStorefront();
+  const { products, productsLoading } = useStorefront(); // for search suggestions
   const { totalQuantity } = useCart();
-  console.log(totalQuantity)
+
+  const { data: menus, isLoading: menusLoading } = useMenus();
+  const mainMenuItems = menus?.main?.items ?? [];
 
   const productList = useMemo(() => products ?? [], [products]);
 
-  // search state (shared)
+  // search state
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const desktopSearchRef = useRef(null);
@@ -268,10 +236,11 @@ const Nav = () => {
 
   const goToFirstResult = () => {
     const first = filteredProducts?.[0];
-    if (first?.handle) {
-      window.location.href = `/collection/product/${first.handle}`;
-    }
+    if (first?.handle) window.location.href = `/collection/product/${first.handle}`;
   };
+
+  // which desktop menu index is open
+  const [openIdx, setOpenIdx] = useState(null);
 
   return (
     <div>
@@ -283,26 +252,22 @@ const Nav = () => {
             onClick={() => setIsMobileMenuOpen((v) => !v)}
             className="p-2 -ml-2"
           >
-            {isMobileMenuOpen ? (
-              <X className="h-6 w-6 text-brand-500" />
-            ) : (
-              <Menu className="h-6 w-6 text-brand-500" />
-            )}
+            {isMobileMenuOpen ? <X className="h-6 w-6 text-brand-500" /> : <Menu className="h-6 w-6 text-brand-500" />}
           </button>
 
           <img src="/roseate.svg" alt="Roseate" className="w-auto" />
 
-          <a href="/cart" aria-label="Cart" className="relative p-1">
+          <Link to="/cart" aria-label="Cart" className="relative p-1">
             <img src="/cart.svg" alt="Cart" className="h-6 w-6" />
             {totalQuantity > 0 && (
               <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] flex items-center justify-center font-medium text-white">
                 {totalQuantity}
               </span>
             )}
-          </a>
+          </Link>
         </nav>
 
-        {/* mobile search bar - full width below nav */}
+        {/* mobile search bar */}
         <div className="px-4 pb-4 pt-2">
           <div className="relative" ref={mobileSearchRef}>
             <input
@@ -315,16 +280,12 @@ const Nav = () => {
                 setIsSearchOpen(true);
               }}
               onFocus={() => setIsSearchOpen(true)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  goToFirstResult();
-                }
-              }}
+              onKeyDown={(e) => e.key === "Enter" && goToFirstResult()}
             />
             <Button
               variant="ghost"
               size="icon"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-500 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-500"
             >
               <Search className="h-5 w-5" />
             </Button>
@@ -342,31 +303,29 @@ const Nav = () => {
           </div>
         </div>
 
-        {/* mobile menu drawer */}
+        {/* mobile menu drawer (menu-driven) */}
         <div
-          className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${isMobileMenuOpen
-            ? "grid-rows-[1fr] opacity-100"
-            : "grid-rows-[0fr] opacity-0"
-            } bg-brand-500`}
+          className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${
+            isMobileMenuOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+          } bg-brand-500`}
         >
           <div className="overflow-hidden">
             <div className="px-6 py-4 space-y-3 text-white font-medium">
-              <a href="/" className="block hover:opacity-90">
-                HOME
-              </a>
-
-              {/* Reused dropdown (mobile variant) */}
-              <ProductsDropdown
-                variant="mobile"
-                isOpen={isMobileProductsOpen}
-                onToggle={() => setIsMobileProductsOpen((v) => !v)}
-                products={productList}
-                loading={productsLoading}
-              />
-
-              <a href="/our-story" className="block hover:opacity-90">
-                OUR STORY
-              </a>
+              {menusLoading && <span className="opacity-80">Loading menu…</span>}
+              {!menusLoading &&
+                mainMenuItems.map((item) => {
+                  const hasChildren = item.items && item.items.length > 0;
+                  if (hasChildren) {
+                    return (
+                      <MobileAccordion key={item.id} title={item.title} items={item.items} />
+                    );
+                  }
+                  return (
+                    <Link key={item.id} to={toPath(item.url)} className="block hover:opacity-90">
+                      {item.title.toUpperCase()}
+                    </Link>
+                  );
+                })}
             </div>
           </div>
         </div>
@@ -382,52 +341,50 @@ const Nav = () => {
             </Link>
 
             <div className="flex gap-20">
-              {/* Links */}
+              {/* Menu-driven links */}
               <div className="flex items-center gap-8">
-                <a
-                  href="/"
-                  className="text-brand-500 font-medium text-body hover:text-brand-600 transition-colors"
-                >
-                  HOME
-                </a>
+                {menusLoading && (
+                  <span className="text-gray-500">Loading…</span>
+                )}
 
-                <div
-                  className="relative"
-                  onMouseEnter={() => setIsProductsOpen(true)}
-                  onMouseLeave={() => setIsProductsOpen(false)}
-                >
-                  <button className="flex cursor-pointer items-center gap-1 text-brand-500 font-medium text-body hover:text-brand-600 transition-colors">
-                    PRODUCTS
-                    <ChevronDown
-                      className={`h-4 w-4 transition-transform ${isProductsOpen ? "rotate-180" : ""
-                        }`}
-                    />
-                  </button>
+                {!menusLoading &&
+                  mainMenuItems.map((item, idx) => {
+                    const hasChildren = item.items && item.items.length > 0;
 
-                  {/* Reused dropdown (desktop variant) */}
-                  <ProductsDropdown
-                    isOpen={isProductsOpen}
-                    products={productList}
-                    loading={productsLoading}
-                    variant="desktop"
-                  />
-                </div>
+                    if (!hasChildren) {
+                      return (
+                        <Link
+                          key={item.id}
+                          to={toPath(item.url)}
+                          className="text-brand-500 font-medium text-body hover:text-brand-600 transition-colors"
+                        >
+                          {item.title.toUpperCase()}
+                        </Link>
+                      );
+                    }
 
-                <a
-                  href="/our-story"
-                  className="text-brand-500 font-medium text-body hover:text-brand-600 transition-colors"
-                >
-                  OUR STORY
-                </a>
-                <a
-                  href="/contact"
-                  className="text-brand-500 font-medium text-body hover:text-brand-600 transition-colors"
-                >
-                  CONTACT
-                </a>
+                    return (
+                      <div
+                        key={item.id}
+                        className="relative"
+                        onMouseEnter={() => setOpenIdx(idx)}
+                        onMouseLeave={() => setOpenIdx((v) => (v === idx ? null : v))}
+                      >
+                        <button className="flex cursor-pointer items-center gap-1 text-brand-500 font-medium text-body hover:text-brand-600 transition-colors">
+                          {item.title.toUpperCase()}
+                          <ChevronDown
+                            className={`h-4 w-4 transition-transform ${
+                              openIdx === idx ? "rotate-180" : ""
+                            }`}
+                          />
+                        </button>
+                        {openIdx === idx && <MenuDropdown items={item.items} />}
+                      </div>
+                    );
+                  })}
               </div>
 
-              {/* Right - Icons + search */}
+              {/* Right - search + cart */}
               <div className="flex items-start justify-end gap-4">
                 <div className="relative" ref={desktopSearchRef}>
                   <input
@@ -440,24 +397,20 @@ const Nav = () => {
                       setIsSearchOpen(true);
                     }}
                     onFocus={() => setIsSearchOpen(true)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        goToFirstResult();
-                      }
-                    }}
+                    onKeyDown={(e) => e.key === "Enter" && goToFirstResult()}
                   />
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-500 transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-500"
                   >
-                    <Search className="text-brand-500" />
+                    <Search />
                   </Button>
                   {isSearchOpen && filteredProducts.length > 0 && (
-                    <div className="absolute left-0 right-0 mt-2 rounded-xl border border-gray-100 bg-white shadow-xl ring-1 ring-black/5 z-50">
+                    <div className="absolute md:left-[-180px] lg:left-[-100px] mt-2 min-w-md rounded-xl border border-gray-100 bg-white shadow-xl ring-1 ring-black/5 z-50">
                       <VirtualList
                         items={filteredProducts}
-                        height={320}
+                        height={520}
                         itemHeight={56}
                         overscan={6}
                         renderItem={(p) => <ProductRow key={p.id} p={p} />}
@@ -466,15 +419,17 @@ const Nav = () => {
                   )}
                 </div>
 
-
-                <a href="/cart" className="relative inline-grid place-items-center w-10 h-10 text-brand-500 hover:text-brand-600">
+                <Link
+                  to="/cart"
+                  className="relative inline-grid place-items-center w-10 h-10 text-brand-500 hover:text-brand-600"
+                >
                   <img src="/cart.svg" alt="Cart" />
                   {totalQuantity > 0 && (
                     <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-xs flex items-center justify-center font-medium">
                       {totalQuantity}
                     </span>
                   )}
-                </a>
+                </Link>
               </div>
             </div>
           </div>

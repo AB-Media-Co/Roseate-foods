@@ -1,10 +1,7 @@
 import React from 'react'
-import { MapPin, Mail, Phone } from 'lucide-react';
+import { MapPin, Mail } from 'lucide-react';
 import { BrandHeading } from './BrandHeading';
 import { StarburstBadge } from './StarburstBadge';
-
-// NOTE: react-router-dom ka Link external URLs ke liye ideal nahi.
-// External ke liye a tag + target="_blank" use kiya hai niche.
 
 const Footer = () => {
   const FEATURES = [
@@ -39,8 +36,8 @@ const Footer = () => {
   const CONTACT_INFO = {
     address: "Plot No. 137, Ground Floor, Pkt N, Sec 2, Bawana DSIIDC, North West, Delhi-110039",
     email: "info@roseatefarms.com",
-    phone: "+91 8178224814",      
-    whatsapp: "+91 8178224814",   
+    phone: "+91 8178224814",
+    whatsapp: "+91 8178224814",
   };
 
   const COMPANY_DESC = {
@@ -54,7 +51,7 @@ const Footer = () => {
     </svg>
   );
 
-  // helpers for links
+  // helpers
   const onlyDigits = (s = '') => s.replace(/[^\d]/g, '');
   const telHref = (s = '') => `tel:${s.replace(/\s+/g, '')}`;
   const mailHref = (s = '') => `mailto:${s}`;
@@ -72,14 +69,13 @@ const Footer = () => {
     const Content = () => (
       <>
         {reverse && kind === 'address' ? (
-          // split lines but as a single link
-          <span className="text-sm text-right">
+          <span className="text-body text-right">
             {text.split(',').slice(0, 2).join(',')}
             <br />
             {text.split(',').slice(2).join(',')}
           </span>
         ) : (
-          <span className={kind === 'email' || kind === 'phone' || kind === 'whatsapp' ? 'text-sm font-medium' : 'text-xs leading-relaxed'}>
+          <span className={kind === 'email' || kind === 'phone' || kind === 'whatsapp' ? 'text-body font-medium' : 'text-small leading-relaxed'}>
             {text}
           </span>
         )}
@@ -112,8 +108,8 @@ const Footer = () => {
       >
         {!mobile && (
           <div className="flex flex-col items-start">
-            <span className="text-base font-bold">Whatsapp</span>
-            <span className="text-xs">Click To Chat</span>
+            <span className="text-body font-bold">Whatsapp</span>
+            <span className="text-small">Click To Chat</span>
           </div>
         )}
         <div className={`${mobile ? 'w-10 h-10' : 'w-12 h-12'} bg-white rounded-full flex items-center justify-center flex-shrink-0`}>
@@ -121,8 +117,8 @@ const Footer = () => {
         </div>
         {mobile && (
           <div className="flex flex-col">
-            <span className="text-sm font-bold">Whatsapp</span>
-            <span className="text-xs opacity-80">Click To Chat</span>
+            <span className="text-body font-bold">Whatsapp</span>
+            <span className="text-small opacity-80">Click To Chat</span>
           </div>
         )}
       </a>
@@ -147,11 +143,11 @@ const Footer = () => {
 
   const LinkList = ({ links, title }) => (
     <div>
-      <h4 className="text-sm font-semibold uppercase tracking-wide mb-4">{title}</h4>
+      <h4 className="text-small font-semibold uppercase tracking-wide mb-4">{title}</h4>
       <ul className="space-y-2 md:space-y-2.5 lg:space-y-2">
         {links.map((link) => (
           <li key={link.text}>
-            <a href={link.href} className="text-xs hover:opacity-80 transition-opacity">{link.text}</a>
+            <a href={link.href} className="text-small hover:opacity-80 transition-opacity">{link.text}</a>
           </li>
         ))}
       </ul>
@@ -164,7 +160,7 @@ const Footer = () => {
       <div className="bg-center">
         <div className="content py-16">
           <div className="text-center">
-            <BrandHeading className="text-2xl md:text-4xl font-semibold text-white uppercase mb-12" accentWord="FARMS">
+            <BrandHeading className="text-subheading md:text-heading font-semibold text-white uppercase mb-12" accentWord="FARMS">
               WHY ROSEATE
             </BrandHeading>
             <div className="flex items-center no-scrollbar justify-between gap-10 overflow-hidden overflow-x-auto">
@@ -174,7 +170,7 @@ const Footer = () => {
                   key={feature.title}
                   title={feature.title}
                   icon={feature.icon}
-                  titleClassName="text-white"
+                  titleClassName="text-white text-small md:text-body"
                 />
               ))}
             </div>
@@ -191,27 +187,26 @@ const Footer = () => {
             <img src="/roseateW.svg" alt="Roseate Farms" className="h-24 md:h-32" />
             <ContactItem icon={MapPin} text={CONTACT_INFO.address} kind="address" />
             <ContactItem icon={Mail} text={CONTACT_INFO.email} kind="email" />
-            {/* {CONTACT_INFO.phone && <ContactItem icon={Phone} text={CONTACT_INFO.phone} kind="phone" />} */}
             {CONTACT_INFO.whatsapp && <WhatsAppButton mobile />}
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-wide">{COMPANY_DESC.title}</h4>
-              <p className="text-xs leading-relaxed opacity-90">{COMPANY_DESC.text}</p>
+              <h4 className="text-subheading md:text-subheading font-semibold uppercase tracking-wide">{COMPANY_DESC.title}</h4>
+              <p className="text-body opacity-90">{COMPANY_DESC.text}</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Left Side - Newsletter (Desktop) */}
             <div className="hidden lg:block">
-              <h3 className="text-base font-bold uppercase tracking-wide mb-6">
+              <h3 className="text-body font-bold uppercase tracking-wide mb-6">
                 SUBSCRIBE TO OUR NEWSLETTER FOR UPDATES AND SPECIAL OFFERS!
               </h3>
               <div className="relative mb-6">
                 <input
                   type="email"
                   placeholder="Enter Your Email"
-                  className="w-full px-6 py-4 pr-40 rounded-full text-gray-700 text-base focus:outline-none bg-white"
+                  className="w-full px-6 py-4 pr-40 rounded-full text-gray-700 text-body bg-white focus:outline-none"
                 />
-                <button className="absolute right-1 top-1 bottom-1 bg-brand-500 hover:bg-brand-600 text-white px-10 rounded-full font-semibold text-base transition-colors">
+                <button className="absolute right-1 top-1 bottom-1 bg-brand-500 hover:bg-brand-600 text-white px-10 rounded-full font-semibold text-body transition-colors">
                   Subscribe
                 </button>
               </div>
@@ -219,7 +214,7 @@ const Footer = () => {
                 <div className="bg-white rounded-lg px-4 py-2.5 flex items-center">
                   <img src="/footer/fassai.svg" alt="FSSAI" className="h-10" />
                 </div>
-                <span className="text-sm font-medium">LIC NO: 13325008000620</span>
+                <span className="text-body font-medium">LIC NO: 13325008000620</span>
               </div>
             </div>
 
@@ -227,7 +222,6 @@ const Footer = () => {
             <div className="hidden lg:flex flex-col gap-4 items-end">
               <ContactItem icon={MapPin} text={CONTACT_INFO.address} kind="address" reverse />
               <ContactItem icon={Mail} text={CONTACT_INFO.email} kind="email" reverse />
-              {/* {CONTACT_INFO.phone && <ContactItem icon={Phone} text={CONTACT_INFO.phone} kind="phone" reverse />} */}
               {CONTACT_INFO.whatsapp && <WhatsAppButton />}
             </div>
           </div>
@@ -237,16 +231,16 @@ const Footer = () => {
 
         {/* Middle Section - Main Footer Content */}
         <div className="content py-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:[grid-template-columns:1.35fr_1fr_1fr_auto] gap-8">
             {/* Left Column - Follow Us & Description (Desktop) */}
             <div className="hidden md:block">
-              <h4 className="text-sm font-semibold uppercase tracking-wide mb-4">FOLLOW US</h4>
+              <h4 className="text-small font-semibold uppercase tracking-wide mb-4">FOLLOW US</h4>
               <div className="mb-8">
                 <SocialIcons />
               </div>
               <div>
-                <h4 className="text-sm font-semibold uppercase tracking-wide mb-3">{COMPANY_DESC.title}</h4>
-                <p className="text-xs leading-relaxed opacity-90">{COMPANY_DESC.text}</p>
+                <h4 className="text-small font-semibold uppercase tracking-wide mb-3">{COMPANY_DESC.title}</h4>
+                <p className="text-body opacity-90">{COMPANY_DESC.text}</p>
               </div>
             </div>
 
@@ -262,7 +256,7 @@ const Footer = () => {
 
           {/* Mobile: Follow Us Section */}
           <div className="md:hidden mt-8 pt-8 border-t border-white border-opacity-20">
-            <h4 className="text-sm font-semibold uppercase tracking-wide mb-4">FOLLOW US</h4>
+            <h4 className="text-small font-semibold uppercase tracking-wide mb-4">FOLLOW US</h4>
             <SocialIcons mobile />
           </div>
         </div>
@@ -272,7 +266,7 @@ const Footer = () => {
         {/* Bottom Section - Copyright */}
         <div className="content py-4">
           <div className="text-center">
-            <p className="text-xs opacity-80">© 2025 Roseate farms All Rights Reserved.</p>
+            <p className="text-small opacity-80">© 2025 Roseate farms All Rights Reserved.</p>
           </div>
         </div>
       </div>

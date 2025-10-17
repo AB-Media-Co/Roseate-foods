@@ -406,3 +406,51 @@ export const GET_PAGE_BY_HANDLE = /* GraphQL */ `
     }
   }
 `;
+
+export const GET_ALL_MENUS = /* GraphQL */ `
+  query GetAllMenus {
+    mainMenu: menu(handle: "main-menu") {
+      id
+      title
+      items {
+        id
+        title
+        url
+        type
+        resource {
+          __typename
+          ... on Product { handle }
+          ... on Collection { handle }
+          ... on Page { handle }
+        }
+        items {
+          id
+          title
+          url
+        }
+      }
+    }
+
+    footerMenu: menu(handle: "footer-menu") {
+      id
+      title
+      items {
+        id
+        title
+        url
+        type
+      }
+    }
+
+    customerAccountMenu: menu(handle: "customer-account-main-menu") {
+      id
+      title
+      items {
+        id
+        title
+        url
+        type
+      }
+    }
+  }
+`;
