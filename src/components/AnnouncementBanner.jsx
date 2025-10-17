@@ -66,8 +66,8 @@ const AnnouncementBanner = () => {
             </div>
 
             {/* phone shows only on lg+ to avoid md tablet crowding */}
-            <a href="tel:+911234456791" className="hidden lg:flex items-center gap-1 border-l border-white/30 pl-3 ml-1 text-sm whitespace-nowrap">
-              <span >+ (91) 123-4456791</span>
+            <a href="tel:+918178224814" className="hidden lg:flex items-center gap-1 border-l border-white/30 pl-3 ml-1 text-sm whitespace-nowrap">
+              <span >+ (91) 8178224814</span>
             </a>
           </div>
 
