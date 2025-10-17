@@ -13,10 +13,10 @@ const Footer = () => {
   ];
 
   const SOCIAL_LINKS = [
-    { icon: "/footer/footerFb.svg", alt: "Facebook" ,href:"https://www.facebook.com/people/Roseate-Farms/pfbid028djGjjwpFN2yAsWwzvQ1oHW8BUmTb8hJVB6iqenFnmVmjoGFVcELgTQQDwXdL5jul/"},
-    { icon: "/footer/FooterX.svg", alt: "X" ,href:"https://x.com/roseatefarms"},
-    { icon: "/footer/footerLinkeidn.svg", alt: "LinkedIn" ,href:"https://www.linkedin.com/company/roseatefarms/"},
-    { icon: "/footer/foooterIntsa.svg", alt: "Instagram" ,href:"https://www.instagram.com/roseatefarms/"},
+    { icon: "/footer/footerFb.svg", alt: "Facebook", href: "https://www.facebook.com/people/Roseate-Farms/pfbid028djGjjwpFN2yAsWwzvQ1oHW8BUmTb8hJVB6iqenFnmVmjoGFVcELgTQQDwXdL5jul/" },
+    { icon: "/footer/FooterX.svg", alt: "X", href: "https://x.com/roseatefarms" },
+    { icon: "/footer/footerLinkeidn.svg", alt: "LinkedIn", href: "https://www.linkedin.com/company/roseatefarms/" },
+    { icon: "/footer/foooterIntsa.svg", alt: "Instagram", href: "https://www.instagram.com/roseatefarms/" },
   ];
 
   const MORE_INFO_LINKS = [
@@ -142,7 +142,7 @@ const Footer = () => {
   );
 
   const LinkList = ({ links, title }) => (
-    <div>
+    <div className='md:text-center'>
       <h4 className="text-small font-semibold uppercase tracking-wide mb-4">{title}</h4>
       <div className="space-y-2 md:space-y-2.5 lg:space-y-2">
         {links.map((link) => (
@@ -188,7 +188,7 @@ const Footer = () => {
             <ContactItem icon={MapPin} text={CONTACT_INFO.address} kind="address" />
             <ContactItem icon={Mail} text={CONTACT_INFO.email} kind="email" />
             {CONTACT_INFO.whatsapp && <WhatsAppButton mobile />}
-            <div>
+            <div className='flex flex-col gap-4 my-2'>
               <h4 className="text-subheading md:text-subheading font-semibold uppercase tracking-wide">{COMPANY_DESC.title}</h4>
               <p className="text-body opacity-90">{COMPANY_DESC.text}</p>
             </div>
@@ -231,16 +231,19 @@ const Footer = () => {
 
         {/* Middle Section - Main Footer Content */}
         <div className="content py-8">
-          <div className="grid grid-cols-1 md:[grid-template-columns:1.35fr_1fr_1fr_auto] gap-8">
+          <div className="grid grid-cols-1 md:[grid-template-columns:1.45fr_1fr_1fr_1fr] gap-8">
             {/* Left Column - Follow Us & Description (Desktop) */}
             <div className="hidden md:block">
-              <h4 className="text-small font-semibold uppercase tracking-wide mb-4">FOLLOW US</h4>
-              <div className="mb-8">
-                <SocialIcons />
-              </div>
               <div>
                 <h4 className="text-small font-semibold uppercase tracking-wide mb-3">{COMPANY_DESC.title}</h4>
                 <p className="text-body opacity-90">{COMPANY_DESC.text}</p>
+              </div>
+              <div className='flex gap-6 my-8 items-center'>
+                <h4 className="text-small font-semibold uppercase tracking-wide ">FOLLOW US : </h4>
+
+                <div className="">
+                  <SocialIcons />
+                </div>
               </div>
             </div>
 
@@ -249,7 +252,7 @@ const Footer = () => {
             <LinkList links={QUICK_LINKS} title="QUICK LINKS" />
 
             {/* Logo Column (Desktop) */}
-            <div className="hidden md:flex justify-end items-start">
+            <div className="hidden md:flex justify-center items-start">
               <img src="/roseateW.svg" alt="Roseate Farms" className="h-24 md:h-32" />
             </div>
           </div>
